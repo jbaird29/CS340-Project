@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lenny's Lawnmowers</title>
-</head>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Lenny's Lawnmowers</title>
+    </head>
 
-<!--FOR REFERENCE: Project Requirements-->
-<!--
+    <!----------------------------------------------------------------------------------------------------->
+    <!--FOR REFERENCE: The Project Requirements are copied and pasted below: -->
+    <!----------------------------------------------------------------------------------------------------->
+    <!--
     It should be possible to INSERT entries into every table individually.
 -->
-<!--
+    <!--
     Every table should be used in at least one SELECT query. For the SELECT queries, 
     it is fine to just display the content of the tables, but your website needs to also 
     have the ability to search using text or filter using a dynamically populated list of 
@@ -19,20 +21,20 @@
     It is generally not appropriate to have only a single query that joins all tables and 
     displays them
 -->
-<!--
+    <!--
     You need to include one DELETE and one UPDATE function in your website, for any one of 
     the entities. In addition, it should be possible to add and remove things from at least 
     one many-to-many relationship and it should be possible to add things to all relationships. 
     This means you need INSERT functionality for all relationships as well as entities. And 
     DELETE for at least one many-to-many relationship.
 -->
-<!--
+    <!--
     In a one-to-many relationship (like bsg_people to bsg_planets), you should be able to set the 
     foreign key value to NULL (such as on a person in bsg_people), that removes the relationship. 
     In case none of the one-to-many relationships in your database has partial participation, you 
     would need to change that to make sure they can have NULL values.
 -->
-<!--
+    <!--
     In a many-to-many relationship, to remove a relationship one would need to delete a row from a table. 
     That would be the case with bsg_people and bsg_certifications. One should be able to add and remove 
     certifications for a person without deleting either bsg_people rows or bsg_certification rows. 
@@ -40,58 +42,69 @@
     that the rows in the relevant entity tables are not impacted, that is sufficient.
 -->
 
-<body>
-    <h1>Lenny's Lawnmowers Database UI</h1>
-    <h2>Project Group #10: Jonathan Baird & Patrick Furbert</h2>
+    <!----------------------------------------------------------------------------------------------------->
+    <!--PROPOSED PLAN -->
+    <!----------------------------------------------------------------------------------------------------->
 
-    <h3>INSERT Operations</h3>
-    <ul>
-        <!--Satisfies criteria: possible to insert into every table individually-->
+    <body>
+        <h1>Lenny's Lawnmowers Database UI</h1>
+        <h2>Project Group #10: Jonathan Baird & Patrick Furbert</h2>
+
+        <h3>INSERT Operations</h3>
+        <ul>
+            <!--Satisfies criteria: possible to insert into every table individually-->
             <!--SPEC: a simple HTML form with all fields necessary for that table-->
-        <li><a href="./insert/insert-job.html">Add a new job</a></li>
-        <li><a href="./insert/insert-worker.html">Add a new worker</a></li>
-        <li><a href="./insert/insert-lawnmower.html">Add a new lawnmower</a></li>
-        <li><a href="./insert/insert-house.html">Add a new house</a></li>
-        <li><a href="./insert/insert-sales-manager.html">Add a new sales manager</a></li>
-        <li><a href="./insert/insert-customer-contact.html">Add a new customer contact</a></li>
-    </ul>
+            <li><a href="./insert/insert-job.html">Add a new job</a></li>
+            <li><a href="./insert/insert-worker.html">Add a new worker</a></li>
+            <li><a href="./insert/insert-lawnmower.html">Add a new lawnmower</a></li>
+            <li><a href="./insert/insert-house.html">Add a new house</a></li>
+            <li><a href="./insert/insert-sales-manager.html">Add a new sales manager</a></li>
+            <li><a href="./insert/insert-customer-contact.html">Add a new customer contact</a></li>
+        </ul>
 
-    <h3>SELECT Operations</h3>
-    <ul>
-        <!--Satisfies criteria: at least one entity has search/filter functionality-->
+        <h3>SELECT Operations</h3>
+        <ul>
+            <!--Satisfies criteria: at least one entity has search/filter functionality; uses contacts in a SELECT-->
             <!--SPEC: the page will have a form that lets the user input firstname and/or lastname-->
             <!--SPEC: FROM customer_contacts WHERE first_name LIKE '%' [AND|OR] last_name LIKE '%'-->
-        <li><a href="./select/search-customer-contact.html">Search for a customer contact by name</a></li>
-        <!--Satisfies criteria: uses lawnmowers and workers entities-->
+            <li><a href="./select/search-customer-contact.html">Search for a customer contact by name</a></li>
+            <!--Satisfies criteria: uses lawnmowers and workers entities in a SELECT-->
             <!--SPEC: FROM lawnmowers LEFT JOIN workers-->
-        <li><a href="./select/browse-lawnmowers.html">Browse lawnmowers</a></li> 
-        <!--Satisfies criteria: uses jobs, workers, houses entities-->
+            <li><a href="./select/browse-lawnmowers.html">Browse lawnmowers</a></li>
+            <!--Satisfies criteria: uses jobs, workers, houses entities in a SELECT-->
             <!--SPEC: FROM jobs LEFT JOIN workers LEFT JOIN houses-->
-        <li><a href="./select/browse-jobs.html">Browse jobs</a></li>
-        <!--Satisfies criteria: uses sales manager and hosues entites-->
+            <li><a href="./select/browse-jobs.html">Browse jobs</a></li>
+            <!--Satisfies criteria: uses sales manager and hosues entites in a SELECT-->
             <!--SPEC: FROM sales_managers LEFT JOIN houses-->
-        <li><a href="./select/browse-sales-managers.html">Browse houses by sales manager</a></li> 
-    </ul>
+            <li><a href="./select/browse-sales-managers.html">Browse houses by sales manager</a></li>
+        </ul>
 
-    <h3>DELETE Operations</h3>
-    <ul>
-        <!--Satisfies criteria: removal from many-to-many relationship-->
+        <h3>DELETE Operations</h3>
+        <ul>
+            <!--Satisfies criteria: one DELETE operation on a many-to-many relationship table-->
             <!--SPEC: the page will display a list of all jobs with a button to 'remove this job'-->
             <!--SPEC: the button will submit a POST with the given job_id-->
-        <li><a href="./delete/delete-job.html">Delete a job</a></li>
-        <!--Satisfies criteria: setting FK to NULL in a one-to-many relationship (sales_manager_id in houses will be NULL)-->
+            <li><a href="./delete/delete-job.html">Delete a job</a></li>
+            <!--Satisfies criteria: one DELETE operation on an entity table-->
             <!--SPEC: the page will display a list of all sales managers with a button to 'remove this sales managers'-->
             <!--SPEC: the button will submit a POST with the given sales_manager_id-->
-        <li><a href="./delete/delete-sales-manager.html">Delete a sales manager</a></li> 
-    </ul>
+            <li><a href="./delete/delete-sales-manager.html">Delete a sales manager</a></li>
+        </ul>
 
-    <h3>UPDATE Operations</h3>
-    <ul>
-        <!--Satisfies criteria: at least one update operation-->
-            <!--SPEC: the page will display a list of lawnmoweres, a checkbox of whether is_funciton is true or not-->
+        <h3>UPDATE Operations</h3>
+        <ul>
+            <!--Satisfies criteria: one UPDATE operation on an entity table-->
+            <!--SPEC: the page will display a list of lawnmowers, a checkbox of whether is_funciton is true or not-->
             <!--SPEC: the user can toggle the checkboxes on or off for certain lawnmowers-->
             <!--SPEC: the form will submit a PATCH to update is_functional attributes for the lawnmowers-->
-        <li><a href="./update/update-lawnmower.html">Update lawnmower status</a></li>
-    </ul>
-</body>
+            <li><a href="./update/update-lawnmower.html">Update lawnmower status</a></li>
+
+            <!--Satisfies criteria: set a FK value to NULL in a many-to-one to remove the relationship-->
+            <!--I asked the TA a question about this requirement: https://edstem.org/us/courses/5168/discussion/386820-->
+            <!--SPEC: the page will display a list of houses and the corresponding sales manager ID / name-->
+            <!--SPEC: the user can update the sales manager or set the sales manager ID to null-->
+            <!--SPEC: the form will submit a PATCH to update the attribute-->
+            <li><a href="./update/update-lawnmower.html">Update house's sales manager</a></li>
+        </ul>
+    </body>
 </html>
