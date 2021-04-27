@@ -11,48 +11,54 @@
             integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
             crossorigin="anonymous"
         />
-        <title>Jobs</title>
+        <title>Customer Contacts</title>
     </head>
     <body>
         <nav role="navigation" class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-item nav-link" href="index.html">Home</a>
-                    <a class="nav-item nav-link active" href="jobs.html">Jobs</a>
+                    <a class="nav-item nav-link" href="jobs.html">Jobs</a>
                     <a class="nav-item nav-link" href="workers.html">Workers</a>
                     <a class="nav-item nav-link" href="houses.html">Houses</a>
                     <a class="nav-item nav-link" href="lawnmowers.html">Lawnmowers</a>
                     <a class="nav-item nav-link" href="sales-managers.html">Sales Managers</a>
-                    <a class="nav-item nav-link" href="customer-contacts.html">Customer Contacts</a>
+                    <a class="nav-item nav-link active" href="customer-contacts.html">Customer Contacts</a>
                 </div>
             </div>
         </nav>
 
         <main role="main" class="container">
-            <h1 class="mt-4 text-center">Jobs Table</h1>
+            <h1 class="mt-4 text-center">Customer Contacts Table</h1>
 
-            <h3 class="mt-4">Add a New Job</h3>
+            <h3 class="mt-4">Add a New Contact</h3>
             <form>
                 <div class="row">
                     <div class="col">
-                        <label for="date">Job Date</label>
-                        <input type="date" class="form-control" id="date" />
+                        <label for="first_name">First Name</label>
+                        <input type="text" class="form-control" id="first_name" />
                     </div>
                     <div class="col">
-                        <label for="total_price">Total Price (in $)</label>
-                        <input type="number" class="form-control" id="total_price" />
+                        <label for="last_name">Last Name</label>
+                        <input type="text" class="form-control" id="last_name" />
                     </div>
                     <div class="col">
-                        <label for="worker_id">Worker ID</label>
-                        <select class="form-control" id="worker_id">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                        </select>
+                        <label for="date">Email</label>
+                        <input type="email" class="form-control" id="email" />
                     </div>
                     <div class="col">
-                        <label for="house_id">House ID</label>
-                        <select class="form-control" id="house_id">
+                        <label for="phone_number">Phone Number</label>
+                        <input
+                            type="tel"
+                            class="form-control"
+                            id="phone_number"
+                            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                            placeholder="Format: 999-999-999"
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="lawnmower_id">House ID</label>
+                        <select class="form-control" id="lawnmower_id">
                             <option>1</option>
                             <option>2</option>
                             <option>3</option>
@@ -61,44 +67,45 @@
                 </div>
             </form>
 
-            <h3 class="mt-5">Browse Jobs</h3>
+            <h3 class="mt-5">Browse Contact</h3>
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Total Price</th>
-                        <th scope="col">Worker ID</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone Number</th>
                         <th scope="col">House ID</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <th scope="row">1</th>
-                        <td>2020/04/26</td>
-                        <td>$120</td>
-                        <td>1</td>
+                        <td>Gary</td>
+                        <td>Golf</td>
+                        <td>gary@example.com</td>
+                        <td>333-333-3333</td>
                         <td>3</td>
                     </tr>
                     <tr>
                         <th scope="row">2</th>
-                        <td>2020/04/25</td>
-                        <td>$80</td>
-                        <td>2</td>
+                        <td>Harry</td>
+                        <td>Hotel</td>
+                        <td>harry@example.com</td>
+                        <td>222-222-2222</td>
                         <td>2</td>
                     </tr>
                     <tr>
                         <th scope="row">2</th>
-                        <td>2020/04/24</td>
-                        <td>$100</td>
-                        <td>3</td>
+                        <td>Isabelle</td>
+                        <td>India</td>
+                        <td>isabelle@example.com</td>
+                        <td>111-111-1111</td>
                         <td>1</td>
                     </tr>
                 </tbody>
             </table>
         </main>
-        <script>
-            document.getElementById("date").valueAsDate = new Date();
-        </script>
     </body>
 </html>
