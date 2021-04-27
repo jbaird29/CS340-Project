@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
+    <head> 
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -50,16 +50,21 @@
         <h1>Lenny's Lawnmowers Database UI</h1>
         <h2>Project Group #10: Jonathan Baird & Patrick Furbert</h2>
 
+        <h3>Jobs</h3>
+        <a href="jobs.html">Link</a>
+        <p>Browse jobs, add a new job, delete a job, update a job</p>
+
+        <h1>Projec Outline (For Reference):</h1>
         <h3>INSERT Operations</h3>
         <ul>
             <!--Satisfies criteria: possible to insert into every table individually-->
             <!--SPEC: a simple HTML form with all fields necessary for that table-->
-            <li><a href="./insert/insert-job.html">Add a new job</a></li>
-            <li><a href="./insert/insert-worker.html">Add a new worker</a></li>
-            <li><a href="./insert/insert-lawnmower.html">Add a new lawnmower</a></li>
-            <li><a href="./insert/insert-house.html">Add a new house</a></li>
-            <li><a href="./insert/insert-sales-manager.html">Add a new sales manager</a></li>
-            <li><a href="./insert/insert-customer-contact.html">Add a new customer contact</a></li>
+            <li>Add a new job</a></li>
+            <li>Add a new worker</a></li>
+            <li>Add a new lawnmower</a></li>
+            <li>Add a new house</a></li>
+            <li>Add a new sales manager</a></li>
+            <li>Add a new customer contact</a></li>
         </ul>
 
         <h3>SELECT Operations</h3>
@@ -67,16 +72,14 @@
             <!--Satisfies criteria: at least one entity has search/filter functionality; uses contacts in a SELECT-->
             <!--SPEC: the page will have a form that lets the user input firstname and/or lastname-->
             <!--SPEC: FROM customer_contacts WHERE first_name LIKE '%' [AND|OR] last_name LIKE '%'-->
-            <li><a href="./select/search-customer-contact.html">Search for a customer contact by name</a></li>
-            <!--Satisfies criteria: uses lawnmowers and workers entities in a SELECT-->
-            <!--SPEC: FROM lawnmowers LEFT JOIN workers-->
-            <li><a href="./select/browse-lawnmowers.html">Browse lawnmowers</a></li>
-            <!--Satisfies criteria: uses jobs, workers, houses entities in a SELECT-->
-            <!--SPEC: FROM jobs LEFT JOIN workers LEFT JOIN houses-->
-            <li><a href="./select/browse-jobs.html">Browse jobs</a></li>
-            <!--Satisfies criteria: uses sales manager and hosues entites in a SELECT-->
-            <!--SPEC: FROM sales_managers LEFT JOIN houses-->
-            <li><a href="./select/browse-sales-managers.html">Browse houses by sales manager</a></li>
+            <li>Search for a customer contact by name</a></li>
+            <!--Satisfies criteria: possible to SELECT from every table-->
+            <li>Browse jobs</a></li>
+            <li>Browse workers</a></li>
+            <li>Browse lawnmowers</a></li>
+            <li>Browse houses</a></li>
+            <li>Browse sales managers</a></li>
+
         </ul>
 
         <h3>DELETE Operations</h3>
@@ -84,11 +87,11 @@
             <!--Satisfies criteria: one DELETE operation on a many-to-many relationship table-->
             <!--SPEC: the page will display a list of all jobs with a button to 'remove this job'-->
             <!--SPEC: the button will submit a POST with the given job_id-->
-            <li><a href="./delete/delete-job.html">Delete a job</a></li>
+            <li>Delete a job</a></li>
             <!--Satisfies criteria: one DELETE operation on an entity table-->
             <!--SPEC: the page will display a list of all sales managers with a button to 'remove this sales managers'-->
             <!--SPEC: the button will submit a POST with the given sales_manager_id-->
-            <li><a href="./delete/delete-sales-manager.html">Delete a sales manager</a></li>
+            <li>Delete a sales manager</a></li>
         </ul>
 
         <h3>UPDATE Operations</h3>
@@ -97,14 +100,14 @@
             <!--SPEC: the page will display a list of lawnmowers, a checkbox of whether is_funciton is true or not-->
             <!--SPEC: the user can toggle the checkboxes on or off for certain lawnmowers-->
             <!--SPEC: the form will submit a PATCH to update is_functional attributes for the lawnmowers-->
-            <li><a href="./update/update-lawnmower.html">Update lawnmower status</a></li>
+            <li>Update lawnmower status</a></li>
 
             <!--Satisfies criteria: set a FK value to NULL in a many-to-one to remove the relationship-->
             <!--I asked the TA a question about this requirement: https://edstem.org/us/courses/5168/discussion/386820-->
             <!--SPEC: the page will display a list of houses and the corresponding sales manager ID / name-->
             <!--SPEC: the user can update the sales manager or set the sales manager ID to null-->
             <!--SPEC: the form will submit a PATCH to update the attribute-->
-            <li><a href="./update/update-lawnmower.html">Update house's sales manager</a></li>
+            <li>Update house's sales manager</a></li>
         </ul>
     </body>
 </html>
