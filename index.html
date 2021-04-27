@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head> 
+    <head>
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -72,10 +72,9 @@
             <h1 class="mt-4 text-center">Lenny's Lawnmowers</h1>
             <h5 class="mt-2 mb-4 text-center">Project Group #10: Jonathan Baird & Patrick Furbert</h5>
 
-
-            <div class="row" style="font-size: 0.8rem;">
+            <div class="row" style="font-size: 0.8rem">
                 <div class="col">
-                <!--Jobs-->
+                    <!--Jobs-->
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Jobs</h5>
@@ -84,7 +83,12 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">Add a job</li>
                             <li class="list-group-item">Browse jobs</li>
+                            <!--Satisfies criteria: one DELETE operation on a many-to-many relationship table-->
+                            <!--SPEC: the page will display a list of all jobs with a button to 'remove this job'-->
                             <li class="list-group-item">Delete a job [TBU]</li>
+                            <!--Satisfies criteria: one UPDATE operation on a many-to-many relationship table-->
+                            <!--SPEC: the page will display a list of jobs with option to update the job's total price field-->
+                            <!--SPEC: Limit this to total_price field for simplicity? or include all fields?-->
                             <li class="list-group-item">Update a job [TBU]</li>
                         </ul>
                     </div>
@@ -114,6 +118,10 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">Add a house</li>
                             <li class="list-group-item">Browse houses</li>
+                            <!--Satisfies criteria: set a FK value to NULL in a many-to-one to remove the relationship-->
+                            <!--I asked the TA a question about this requirement: https://edstem.org/us/courses/5168/discussion/386820-->
+                            <!--SPEC: the page will display a list of houses and the corresponding sales manager ID / name-->
+                            <!--SPEC: the user can update the sales manager or set the sales manager ID to null-->
                             <li class="list-group-item">Update house's manager [TBU]</li>
                             <li class="list-group-item">-</li>
                         </ul>
@@ -129,6 +137,9 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">Add a lawnmower</li>
                             <li class="list-group-item">Browse lawnmowers</li>
+                            <!--Satisfies criteria: one UPDATE operation on an entity table-->
+                            <!--SPEC: the page will display a list of lawnmowers, a checkbox of whether is_funciton is true or not-->
+                            <!--SPEC: the user can toggle the checkboxes on or off for certain lawnmowers-->
                             <li class="list-group-item">Update lawnmower status [TBU]</li>
                             <li class="list-group-item">-</li>
                         </ul>
@@ -144,6 +155,8 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">Add a manager</li>
                             <li class="list-group-item">Browse managers</li>
+                            <!--Satisfies criteria: one DELETE operation on an entity table-->
+                            <!--SPEC: the page will display a list of all sales managers with a button to 'remove this sales managers'-->
                             <li class="list-group-item">Delete a manager [TBU]</li>
                             <li class="list-group-item">-</li>
                         </ul>
@@ -159,71 +172,15 @@
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">Add a contact</li>
                             <li class="list-group-item">Browse contact</li>
+                            <!--Satisfies criteria: at least one entity has search/filter functionality-->
+                            <!--SPEC: the page will have a form that lets the user input firstname and/or lastname-->
+                            <!--SPEC: FROM customer_contacts WHERE first_name LIKE '%' [AND|OR] last_name LIKE '%'-->
                             <li class="list-group-item">Search by name [TBU]</li>
                             <li class="list-group-item">-</li>
                         </ul>
                     </div>
                 </div>
             </div>
-              
         </main>
-        <aside>
-            <hr>
-            <h4>Project Outline (For Reference - to be deleted):</h4>
-            <h5>INSERT Operations</h5>
-            <ul>
-                <!--Satisfies criteria: possible to insert into every table individually-->
-                <!--SPEC: a simple HTML form with all fields necessary for that table-->
-                <li>Add a new job</a></li>
-                <li>Add a new worker</a></li>
-                <li>Add a new lawnmower</a></li>
-                <li>Add a new house</a></li>
-                <li>Add a new sales manager</a></li>
-                <li>Add a new customer contact</a></li>
-            </ul>
-
-            <h5>SELECT Operations</h5>
-            <ul>
-                <!--Satisfies criteria: at least one entity has search/filter functionality; uses contacts in a SELECT-->
-                <!--SPEC: the page will have a form that lets the user input firstname and/or lastname-->
-                <!--SPEC: FROM customer_contacts WHERE first_name LIKE '%' [AND|OR] last_name LIKE '%'-->
-                <li>Search for a customer contact by name</a></li>
-                <!--Satisfies criteria: possible to SELECT from every table-->
-                <li>Browse jobs</a></li>
-                <li>Browse workers</a></li>
-                <li>Browse lawnmowers</a></li>
-                <li>Browse houses</a></li>
-                <li>Browse sales managers</a></li>
-
-            </ul>
-
-            <h5>DELETE Operations</h5>
-            <ul>
-                <!--Satisfies criteria: one DELETE operation on a many-to-many relationship table-->
-                <!--SPEC: the page will display a list of all jobs with a button to 'remove this job'-->
-                <!--SPEC: the button will submit a POST with the given job_id-->
-                <li>Delete a job</a></li>
-                <!--Satisfies criteria: one DELETE operation on an entity table-->
-                <!--SPEC: the page will display a list of all sales managers with a button to 'remove this sales managers'-->
-                <!--SPEC: the button will submit a POST with the given sales_manager_id-->
-                <li>Delete a sales manager</a></li>
-            </ul>
-
-            <h5>UPDATE Operations</h5>
-            <ul>
-                <!--Satisfies criteria: one UPDATE operation on an entity table-->
-                <!--SPEC: the page will display a list of lawnmowers, a checkbox of whether is_funciton is true or not-->
-                <!--SPEC: the user can toggle the checkboxes on or off for certain lawnmowers-->
-                <!--SPEC: the form will submit a PATCH to update is_functional attributes for the lawnmowers-->
-                <li>Update lawnmower status</a></li>
-
-                <!--Satisfies criteria: set a FK value to NULL in a many-to-one to remove the relationship-->
-                <!--I asked the TA a question about this requirement: https://edstem.org/us/courses/5168/discussion/386820-->
-                <!--SPEC: the page will display a list of houses and the corresponding sales manager ID / name-->
-                <!--SPEC: the user can update the sales manager or set the sales manager ID to null-->
-                <!--SPEC: the form will submit a PATCH to update the attribute-->
-                <li>Update house's sales manager</a></li>
-            </ul>
-        </aside>
     </body>
 </html>
