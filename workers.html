@@ -11,15 +11,15 @@
             integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
             crossorigin="anonymous"
         />
-        <title>Jobs</title>
+        <title>Workers</title>
     </head>
     <body>
         <nav role="navigation" class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-item nav-link" href="index.html">Home</a>
-                    <a class="nav-item nav-link active" href="jobs.html">Jobs</a>
-                    <a class="nav-item nav-link" href="workers.html">Workers</a>
+                    <a class="nav-item nav-link" href="jobs.html">Jobs</a>
+                    <a class="nav-item nav-link active" href="workers.html">Workers</a>
                     <a class="nav-item nav-link" href="#">Houses</a>
                     <a class="nav-item nav-link" href="#">Lawnmowers</a>
                     <a class="nav-item nav-link" href="#">Sales Managers</a>
@@ -29,30 +29,36 @@
         </nav>
 
         <main role="main" class="container">
-            <h1 class="mt-4 text-center">Jobs Table</h1>
+            <h1 class="mt-4 text-center">Workers Table</h1>
 
-            <h3 class="mt-4">Add a New Job</h3>
+            <h3 class="mt-4">Add a New Worker</h3>
             <form>
                 <div class="row">
                     <div class="col">
-                        <label for="date">Job Date</label>
-                        <input type="date" class="form-control" id="date" />
+                        <label for="first_name">First Name</label>
+                        <input type="text" class="form-control" id="first_name" />
                     </div>
                     <div class="col">
-                        <label for="total_price">Total Price (in $)</label>
-                        <input type="number" class="form-control" id="total_price" />
+                        <label for="last_name">Last Name</label>
+                        <input type="text" class="form-control" id="last_name" />
                     </div>
                     <div class="col">
-                        <label for="worker_id">Worker ID</label>
-                        <select class="form-control" id="worker_id">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                        </select>
+                        <label for="date">Email</label>
+                        <input type="email" class="form-control" id="email" />
                     </div>
                     <div class="col">
-                        <label for="house_id">House ID</label>
-                        <select class="form-control" id="house_id">
+                        <label for="phone_number">Phone Number</label>
+                        <input
+                            type="tel"
+                            class="form-control"
+                            id="phone_number"
+                            pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
+                            placeholder="Format: 999-999-999"
+                        />
+                    </div>
+                    <div class="col">
+                        <label for="lawnmower_id">Lawnmower ID</label>
+                        <select class="form-control" id="lawnmower_id">
                             <option>1</option>
                             <option>2</option>
                             <option>3</option>
@@ -61,44 +67,45 @@
                 </div>
             </form>
 
-            <h3 class="mt-5">Browse Jobs</h3>
+            <h3 class="mt-5">Browse Workers</h3>
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Total Price</th>
-                        <th scope="col">Worker ID</th>
-                        <th scope="col">House ID</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Phone Number</th>
+                        <th scope="col">Lawnmower ID</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <th scope="row">1</th>
-                        <td>2020/04/26</td>
-                        <td>$120</td>
-                        <td>1</td>
+                        <td>Adam</td>
+                        <td>Alpha</td>
+                        <td>adam@lennys.com</td>
+                        <td>999-999-999</td>
                         <td>3</td>
                     </tr>
                     <tr>
                         <th scope="row">2</th>
-                        <td>2020/04/25</td>
-                        <td>$80</td>
-                        <td>2</td>
+                        <td>Brenda</td>
+                        <td>Beta</td>
+                        <td>brenda@lennys.com</td>
+                        <td>888-888-888</td>
                         <td>2</td>
                     </tr>
                     <tr>
                         <th scope="row">2</th>
-                        <td>2020/04/24</td>
-                        <td>$100</td>
-                        <td>3</td>
+                        <td>Connor</td>
+                        <td>Charlie</td>
+                        <td>connor@lennys.com</td>
+                        <td>777-777-7777</td>
                         <td>1</td>
                     </tr>
                 </tbody>
             </table>
         </main>
-        <script>
-            document.getElementById("date").valueAsDate = new Date();
-        </script>
     </body>
 </html>
