@@ -11,7 +11,7 @@
             integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
             crossorigin="anonymous"
         />
-        <title>Workers</title>
+        <title>Sales Managers</title>
     </head>
     <body>
         <nav role="navigation" class="navbar navbar-expand-lg navbar-light bg-light">
@@ -19,19 +19,19 @@
                 <div class="navbar-nav">
                     <a class="nav-item nav-link" href="index.html">Home</a>
                     <a class="nav-item nav-link" href="jobs.html">Jobs</a>
-                    <a class="nav-item nav-link active" href="workers.html">Workers</a>
+                    <a class="nav-item nav-link" href="workers.html">Workers</a>
                     <a class="nav-item nav-link" href="houses.html">Houses</a>
                     <a class="nav-item nav-link" href="lawnmowers.html">Lawnmowers</a>
-                    <a class="nav-item nav-link" href="sales-managers.html">Sales Managers</a>
+                    <a class="nav-item nav-link active" href="sales-managers.html">Sales Managers</a>
                     <a class="nav-item nav-link" href="#">Customer Contacts</a>
                 </div>
             </div>
         </nav>
 
         <main role="main" class="container">
-            <h1 class="mt-4 text-center">Workers Table</h1>
+            <h1 class="mt-4 text-center">Sales Managers Table</h1>
 
-            <h3 class="mt-4">Add a New Worker</h3>
+            <h3 class="mt-4">Add a New Sales Manager</h3>
             <form>
                 <div class="row">
                     <div class="col">
@@ -57,17 +57,18 @@
                         />
                     </div>
                     <div class="col">
-                        <label for="lawnmower_id">Lawnmower ID</label>
-                        <select class="form-control" id="lawnmower_id">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
+                        <label for="region">Region</label>
+                        <select class="form-control" id="region">
+                            <option>North</option>
+                            <option>South</option>
+                            <option>East</option>
+                            <option>West</option>
                         </select>
                     </div>
                 </div>
             </form>
 
-            <h3 class="mt-5">Browse Workers</h3>
+            <h3 class="mt-5">Browse Sales Managers</h3>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -76,33 +77,33 @@
                         <th scope="col">Last Name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Phone Number</th>
-                        <th scope="col">Lawnmower ID</th>
+                        <th scope="col">Region</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <th scope="row">1</th>
-                        <td>Adam</td>
-                        <td>Alpha</td>
-                        <td>adam@lennys.com</td>
-                        <td>999-999-9999</td>
-                        <td>3</td>
+                        <td>David</td>
+                        <td>Delta</td>
+                        <td>david@lennys.com</td>
+                        <td>666-666-6666</td>
+                        <td>North</td>
                     </tr>
                     <tr>
                         <th scope="row">2</th>
-                        <td>Brenda</td>
-                        <td>Beta</td>
-                        <td>brenda@lennys.com</td>
-                        <td>888-888-8888</td>
-                        <td>2</td>
+                        <td>Evelyn</td>
+                        <td>Echo</td>
+                        <td>evelyn@lennys.com</td>
+                        <td>555-555-5555</td>
+                        <td>East</td>
                     </tr>
                     <tr>
                         <th scope="row">2</th>
-                        <td>Connor</td>
-                        <td>Charlie</td>
-                        <td>connor@lennys.com</td>
-                        <td>777-777-7777</td>
-                        <td>1</td>
+                        <td>Fred</td>
+                        <td>Foxtrot</td>
+                        <td>fred@lennys.com</td>
+                        <td>444-444-4444</td>
+                        <td>South</td>
                     </tr>
                 </tbody>
             </table>
