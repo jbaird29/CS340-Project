@@ -14,12 +14,13 @@
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@forevolve/bootstrap-dark@1.0.0/dist/css/bootstrap-dark.min.css" />
 
+        
         <title>Jobs</title>
     </head>
     <body class="bootstrap-dark">
         <nav role="navigation" class="navbar navbar-expand-lg bg-dark">
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav justify-content-center">
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
                     <a class="nav-item nav-link" href="index.html">Home</a>
                     <a class="nav-item nav-link active" href="jobs.html">Jobs</a>
                     <a class="nav-item nav-link" href="workers.html">Workers</a>
@@ -74,6 +75,7 @@
                         <th scope="col">Total Price</th>
                         <th scope="col">Worker ID</th>
                         <th scope="col">House ID</th>
+                        <th scope="col">Update/Delete</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -83,6 +85,12 @@
                         <td>$120</td>
                         <td>1</td>
                         <td>3</td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                                <button type="button" class="btn btn-outline-light">Update</button>
+                                <button type="button" class="btn btn-outline-light">Delete</button>
+                              </div>
+                        </td>
                     </tr>
                     <tr>
                         <th scope="row">2</th>
@@ -90,6 +98,12 @@
                         <td>$80</td>
                         <td>2</td>
                         <td>2</td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                                <button type="button" class="btn btn-outline-light">Update</button>
+                                <button type="button" class="btn btn-outline-light">Delete</button>
+                              </div>
+                        </td>
                     </tr>
                     <tr>
                         <th scope="row">2</th>
@@ -97,6 +111,12 @@
                         <td>$100</td>
                         <td>3</td>
                         <td>1</td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="Basic mixed styles example">
+                                <button type="button" class="btn btn-outline-light">Update</button>
+                                <button type="button" class="btn btn-outline-light">Delete</button>
+                              </div>
+                        </td>
                     </tr>
                 </tbody>
             </table>

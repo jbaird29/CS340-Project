@@ -18,7 +18,7 @@
     </head>
     <body>
         <nav role="navigation" class="navbar navbar-expand-lg bg-dark">
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-item nav-link" href="index.html">Home</a>
                     <a class="nav-item nav-link" href="jobs.html">Jobs</a>
@@ -68,10 +68,32 @@
                         </select>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary mt-2">Submit</button>
+                <button type="submit" class="btn btn-outline-light mt-2">Submit</button>
+            </form>
+            
+            <br>
+
+            <h3 class="mt-4">Search Contacts by Name</h3>
+
+            <form>
+                <div class="row">
+                    <div class="col">
+                        <label for="first_name">First Name</label>
+                        <input type="text" class="form-control" id="first_name" />
+                    </div>
+                    <div class="col">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" class="form-control" id="last_name" />
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-outline-light mt-2">Submit</button>
             </form>
 
-            <h3 class="mt-5">Browse Contact</h3>
+            <br>
+
+            <h3 class="mt-5">Browse Contacts</h3>
+
             <table class="table table-striped">
                 <thead>
                     <tr>
