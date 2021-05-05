@@ -76,9 +76,9 @@
             <h1 class="mt-4 text-center">Lenny's Lawnmowers</h1>
             <h5 class="mt-2 mb-4 text-center">Project Group #10: Jonathan Baird & Patrick Furbert</h5>
 
-            <div class="row" style="font-size: 0.9rem">
+            <div class="row no-gutters" style="font-size: 0.9rem">
+                <!--Jobs-->
                 <div class="col">
-                    <!--Jobs-->
                     <div class="card">
                         <div class="card-body">
                             <h5 class="card-title">Jobs</h5>
@@ -89,11 +89,26 @@
                             <li class="list-group-item">Browse jobs</li>
                             <!--Satisfies criteria: one DELETE operation on a many-to-many relationship table-->
                             <!--SPEC: the page will display a list of all jobs with a button to 'remove this job'-->
-                            <li class="list-group-item">Delete a job</li>
+                            <li class="list-group-item">Delete a job*</li>
                             <!--Satisfies criteria: one UPDATE operation on a many-to-many relationship table-->
                             <!--SPEC: the page will display a list of jobs with option to update the job's total price field-->
                             <!--SPEC: Limit this to total_price field for simplicity? or include all fields?-->
                             <li class="list-group-item">Update a job</li>
+                        </ul>
+                    </div>
+                </div>
+                <!--Job Workers-->
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Job Workers</h5>
+                            <a href="jobs_workers.html" class="card-link">Go to Page</a>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Add a job workers</li>
+                            <li class="list-group-item">Browse job workers</li>
+                            <li class="list-group-item">Update job workers</li>
+                            <li class="list-group-item">Delete job workers</li>
                         </ul>
                     </div>
                 </div>
@@ -124,7 +139,7 @@
                             <!--I asked the TA a question about this requirement: https://edstem.org/us/courses/5168/discussion/386820-->
                             <!--SPEC: the page will display a list of houses and the corresponding sales manager ID / name-->
                             <!--SPEC: the user can update the sales manager or set the sales manager ID to null-->
-                            <li class="list-group-item">Update house's manager</li>
+                            <li class="list-group-item">Update house's manager**</li>
                         </ul>
                     </div>
                 </div>
@@ -179,6 +194,8 @@
                     </div>
                 </div>
             </div>
+            <div class="mt-3">*Deleting a job will also delete the corresponding records in the Job Workers M:M table</div>
+            <div class="mt-1">**Setting a house's sales_manager_id to NULL will remove the M:1 relationship</div>
         </main>
     </body>
 </html>
