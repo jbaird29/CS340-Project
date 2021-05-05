@@ -15,15 +15,15 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@forevolve/bootstrap-dark@1.0.0/dist/css/bootstrap-dark.min.css" />
 
         
-        <title>Jobs</title>
+        <title>Jobs Details</title>
     </head>
     <body class="bootstrap-dark">
         <nav role="navigation" class="navbar navbar-expand-lg bg-dark">
             <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
                     <a class="nav-item nav-link" href="index.html">Home</a>
-                    <a class="nav-item nav-link active" href="jobs.html">Jobs</a>
-                    <a class="nav-item nav-link" href="jobs_details.html">Jobs Details</a>
+                    <a class="nav-item nav-link" href="jobs.html">Jobs</a>
+                    <a class="nav-item nav-link active" href="jobs_details.html">Jobs Details</a>
                     <a class="nav-item nav-link" href="workers.html">Workers</a>
                     <a class="nav-item nav-link" href="houses.html">Houses</a>
                     <a class="nav-item nav-link" href="lawnmowers.html">Lawnmowers</a>
@@ -34,38 +34,46 @@
         </nav>
 
         <main role="main" class="container">
-            <h1 class="mt-4 text-center">Jobs Table</h1>
+            <h1 class="mt-4 text-center">Jobs Details Table</h1>
 
             <h3 class="mt-4">Add a New Job</h3>
             <form>
                 <div class="row">
-                    <div class="col">
+                    <!-- <div class="col">
                         <label for="date">Job Date</label>
                         <input type="date" class="form-control" id="date" />
                     </div>
                     <div class="col">
                         <label for="total_price">Total Price (in $)</label>
                         <input type="number" class="form-control" id="total_price" />
+                    </div> -->
+
+                    <div class="col">
+                        <label for="worker_id">Job ID</label>
+                        <select class="form-control" id="worker_id">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                        </select>
                     </div>
 
-                    <!-- <div class="col">
+                    <div class="col">
                         <label for="worker_id">Worker ID</label>
                         <select class="form-control" id="worker_id">
                             <option>1</option>
                             <option>2</option>
                             <option>3</option>
                         </select>
-                    </div> -->
-
-                    <!-- <div class="col">
+                    </div>
+                    
+                    <div class="col">
                         <label for="house_id">House ID</label>
                         <select class="form-control" id="house_id">
                             <option>1</option>
                             <option>2</option>
                             <option>3</option>
                         </select>
-                    </div> -->
-
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-outline-light mt-2">Submit</button>
             </form>
@@ -74,53 +82,53 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Total Price</th>
-                        <!-- <th scope="col">Worker ID</th>
-                        <th scope="col">House ID</th> -->
-                        <th scope="col"></th>
+                        <th scope="col">Job ID</th>
+                        <!-- <th scope="col">Date</th>
+                        <th scope="col">Total Price</th> -->
+                        <th scope="col">Worker ID</th>
+                        <th scope="col">House ID</th>
+                        <!-- <th scope="col"></th> -->
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <th scope="row">1</th>
-                        <td>2020/04/26</td>
-                        <td>$120</td>
-                        <!-- <td>1</td>
-                        <td>3</td> -->
-                        <td>
+                        <!-- <td>2020/04/26</td>
+                        <td>$120</td> -->
+                        <td>1</td>
+                        <td>3</td>
+                        <!-- <td>
                             <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                                 <button type="button" class="btn btn-outline-light">Update</button>
                                 <button type="button" class="btn btn-outline-light">Delete</button>
                               </div>
-                        </td>
+                        </td> -->
                     </tr>
                     <tr>
                         <th scope="row">2</th>
-                        <td>2020/04/25</td>
-                        <td>$80</td>
-                        <!-- <td>2</td>
-                        <td>2</td> -->
-                        <td>
+                        <!-- <td>2020/04/25</td>
+                        <td>$80</td> -->
+                        <td>2</td>
+                        <td>2</td>
+                        <!-- <td>
                             <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                                 <button type="button" class="btn btn-outline-light">Update</button>
                                 <button type="button" class="btn btn-outline-light">Delete</button>
                               </div>
-                        </td>
+                        </td> -->
                     </tr>
                     <tr>
                         <th scope="row">2</th>
-                        <td>2020/04/24</td>
-                        <td>$100</td>
-                        <!-- <td>3</td>
-                        <td>1</td> -->
-                        <td>
+                        <!-- <td>2020/04/24</td>
+                        <td>$100</td> -->
+                        <td>3</td>
+                        <td>1</td>
+                        <!-- <td>
                             <div class="btn-group" role="group" aria-label="Basic mixed styles example">
                                 <button type="button" class="btn btn-outline-light">Update</button>
                                 <button type="button" class="btn btn-outline-light">Delete</button>
                               </div>
-                        </td>
+                        </td> -->
                     </tr>
                 </tbody>
             </table>
