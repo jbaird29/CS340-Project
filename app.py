@@ -1,6 +1,7 @@
 from flask import Flask, render_template, json
 import MySQLdb
 import os
+import database.db_queries as queries
 from dotenv import load_dotenv, find_dotenv
 
 
@@ -13,7 +14,7 @@ host = os.environ.get("340DBHOST")
 user = os.environ.get("340DBUSER")
 passwd = os.environ.get("340DBPW")
 db = os.environ.get("340DB")
-db_connection = MySQLdb.connect(host,user,passwd,db)
+conn = MySQLdb.connect(host,user,passwd,db)
 
 
 # Routes 
@@ -23,16 +24,13 @@ def root():
 
 @app.route('/customer-contacts',methods=['GET'])
 def customer_contacts():
-    query = "SELECT * FROM customer_contacts"
-    cursor = db_connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute(query, args=None)
-    db_connection.commit()
-    results = cursor.fetchall()
-    return render_template("customer-contacts.j2", table_data=results)
+    results = queries.select_all(conn, 'customer_contacts')
+    return render_template("customer-contacts.j2", name="Customer Contacts", table_data=results)
 
 @app.route('/houses',methods=['GET'])
 def houses():
-    return render_template("houses.j2")
+    results = queries.select_all(conn, 'houses')
+    return render_template("houses.j2", name="Houses", table_data=results)
 
 @app.route('/job-workers',methods=['GET'])
 def job_workers():

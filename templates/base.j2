@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@forevolve/bootstrap-dark@1.0.0/dist/css/bootstrap-dark.min.css" />
+        <title>Customer Contacts</title>
+    </head>
+    <body>
+        <nav role="navigation" class="navbar navbar-expand-lg bg-dark">
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <a class="nav-item nav-link" href="/">Home</a>
+                    <a class="nav-item nav-link" href="/jobs">Jobs</a>
+                    <a class="nav-item nav-link" href="/job-workers">Job Workers</a>
+                    <a class="nav-item nav-link" href="/workers">Workers</a>
+                    <a class="nav-item nav-link" href="/houses">Houses</a>
+                    <a class="nav-item nav-link" href="/lawnmowers">Lawnmowers</a>
+                    <a class="nav-item nav-link" href="/sales-managers">Sales Managers</a>
+                    <a class="nav-item nav-link" href="/customer-contacts">Customer Contacts</a>
+                </div>
+            </div>
+        </nav>
+
+        <main role="main" class="container">
+
+            {% block main %}{% endblock %}
+
+            {# The Browse {{entity}} section #}
+            <br />
+            <h3 class="mt-5">Browse {{ name }}</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        {% for key in table_data[0].keys() %}
+                        <th scope="col">{{ key.replace("_", " ") }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in table_data %}
+                    <tr>
+                        {% for key in row.keys() %}
+                        <td>{{row[key]}}</td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+        </main>
+    </body>
+</html>
