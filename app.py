@@ -34,23 +34,28 @@ def houses():
 
 @app.route('/job-workers',methods=['GET'])
 def job_workers():
-    return render_template("job-workers.j2")
+    results = queries.select_all(conn, 'job_workers')
+    return render_template("job-workers.j2", name="Job Workers", table_data=results)
 
 @app.route('/jobs',methods=['GET'])
 def jobs():
-    return render_template("jobs.j2")
+    results = queries.select_all(conn, 'jobs')
+    return render_template("jobs.j2", name="Jobs", table_data=results)
 
 @app.route('/lawnmowers',methods=['GET'])
 def lawnmowers():
-    return render_template("lawnmowers.j2")
+    results = queries.select_all(conn, 'lawnmowers')
+    return render_template("lawnmowers.j2", name="Lawnmowers", table_data=results)
 
 @app.route('/sales-managers',methods=['GET'])
 def sales_managers():
-    return render_template("sales-managers.j2")
+    results = queries.select_all(conn, 'sales_managers')
+    return render_template("sales-managers.j2", name="Sales Managers", table_data=results)
 
 @app.route('/workers',methods=['GET'])
 def workers():
-    return render_template("workers.j2")
+    results = queries.select_all(conn, 'workers')
+    return render_template("workers.j2", name="Workers", table_data=results)
 
 
 # Listener

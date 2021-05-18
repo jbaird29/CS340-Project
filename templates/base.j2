@@ -48,7 +48,11 @@
                     {% endfor %}
                 </tbody>
             </table>
-            
         </main>
+
+        <script>
+            const dateEl = document.getElementById("date")
+            if (dateEl) dateEl.valueAsDate = new Date();
+        </script>
     </body>
 </html>
