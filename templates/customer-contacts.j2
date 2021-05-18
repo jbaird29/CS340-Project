@@ -98,39 +98,19 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">First Name</th>
-                        <th scope="col">Last Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">Phone Number</th>
-                        <th scope="col">House ID</th>
+                        {% for key in table_data[0].keys() %}
+                        <th scope="col">{{ key.replace("_", " ") }}</th>
+                        {% endfor %}
                     </tr>
                 </thead>
                 <tbody>
+                    {% for row in table_data %}
                     <tr>
-                        <th scope="row">1</th>
-                        <td>Gary</td>
-                        <td>Golf</td>
-                        <td>gary@example.com</td>
-                        <td>333-333-3333</td>
-                        <td>3</td>
+                        {% for key in row.keys() %}
+                        <td>{{row[key]}}</td>
+                        {% endfor %}
                     </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Harry</td>
-                        <td>Hotel</td>
-                        <td>harry@example.com</td>
-                        <td>222-222-2222</td>
-                        <td>2</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Isabelle</td>
-                        <td>India</td>
-                        <td>isabelle@example.com</td>
-                        <td>111-111-1111</td>
-                        <td>1</td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </main>
