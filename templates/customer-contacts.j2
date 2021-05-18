@@ -14,28 +14,28 @@
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@forevolve/bootstrap-dark@1.0.0/dist/css/bootstrap-dark.min.css" />
 
-        <title>Sales Managers</title>
+        <title>Customer Contacts</title>
     </head>
     <body>
         <nav role="navigation" class="navbar navbar-expand-lg bg-dark">
             <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="index.html">Home</a>
-                    <a class="nav-item nav-link" href="jobs.html">Jobs</a>
-                    <a class="nav-item nav-link" href="jobs_workers.html">Job Workers</a>
-                    <a class="nav-item nav-link" href="workers.html">Workers</a>
-                    <a class="nav-item nav-link" href="houses.html">Houses</a>
-                    <a class="nav-item nav-link" href="lawnmowers.html">Lawnmowers</a>
-                    <a class="nav-item nav-link active" href="sales-managers.html">Sales Managers</a>
-                    <a class="nav-item nav-link" href="customer-contacts.html">Customer Contacts</a>
+                    <a class="nav-item nav-link" href="/">Home</a>
+                    <a class="nav-item nav-link" href="/jobs">Jobs</a>
+                    <a class="nav-item nav-link" href="/job-workers">Job Workers</a>
+                    <a class="nav-item nav-link" href="/workers">Workers</a>
+                    <a class="nav-item nav-link" href="/houses">Houses</a>
+                    <a class="nav-item nav-link" href="/lawnmowers">Lawnmowers</a>
+                    <a class="nav-item nav-link" href="/sales-managers">Sales Managers</a>
+                    <a class="nav-item nav-link active" href="/customer-contacts">Customer Contacts</a>
                 </div>
             </div>
         </nav>
 
         <main role="main" class="container">
-            <h1 class="mt-4 text-center">Sales Managers Table</h1>
+            <h1 class="mt-4 text-center">Customer Contacts Table</h1>
 
-            <h3 class="mt-4">Add a New Sales Manager</h3>
+            <h3 class="mt-4">Add a New Contact</h3>
             <form>
                 <div class="row">
                     <div class="col">
@@ -61,19 +61,40 @@
                         />
                     </div>
                     <div class="col">
-                        <label for="region">Region</label>
-                        <select class="form-control" id="region">
-                            <option>North</option>
-                            <option>South</option>
-                            <option>East</option>
-                            <option>West</option>
+                        <label for="lawnmower_id">House ID</label>
+                        <select class="form-control" id="lawnmower_id">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
                         </select>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-outline-light mt-2">Submit</button>
             </form>
 
-            <h3 class="mt-5">Browse Sales Managers</h3>
+            <br />
+
+            <h3 class="mt-4">Search Contacts by Name</h3>
+
+            <form>
+                <div class="row">
+                    <div class="col">
+                        <label for="first_name">First Name</label>
+                        <input type="text" class="form-control" id="first_name" />
+                    </div>
+                    <div class="col">
+                        <label for="last_name">Last Name</label>
+                        <input type="text" class="form-control" id="last_name" />
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-outline-light mt-2">Submit</button>
+            </form>
+
+            <br />
+
+            <h3 class="mt-5">Browse Contacts</h3>
+
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -82,43 +103,33 @@
                         <th scope="col">Last Name</th>
                         <th scope="col">Email</th>
                         <th scope="col">Phone Number</th>
-                        <th scope="col">Region</th>
-                        <th scope="col">Delete Record</th>
+                        <th scope="col">House ID</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
                         <th scope="row">1</th>
-                        <td>David</td>
-                        <td>Delta</td>
-                        <td>david@lennys.com</td>
-                        <td>666-666-6666</td>
-                        <td>North</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-light mt-2">Delete</button>
-                        </td>
+                        <td>Gary</td>
+                        <td>Golf</td>
+                        <td>gary@example.com</td>
+                        <td>333-333-3333</td>
+                        <td>3</td>
                     </tr>
                     <tr>
                         <th scope="row">2</th>
-                        <td>Evelyn</td>
-                        <td>Echo</td>
-                        <td>evelyn@lennys.com</td>
-                        <td>555-555-5555</td>
-                        <td>East</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-light mt-2">Delete</button>
-                        </td>
+                        <td>Harry</td>
+                        <td>Hotel</td>
+                        <td>harry@example.com</td>
+                        <td>222-222-2222</td>
+                        <td>2</td>
                     </tr>
                     <tr>
                         <th scope="row">2</th>
-                        <td>Fred</td>
-                        <td>Foxtrot</td>
-                        <td>fred@lennys.com</td>
-                        <td>444-444-4444</td>
-                        <td>South</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-light mt-2">Delete</button>
-                        </td>
+                        <td>Isabelle</td>
+                        <td>India</td>
+                        <td>isabelle@example.com</td>
+                        <td>111-111-1111</td>
+                        <td>1</td>
                     </tr>
                 </tbody>
             </table>
