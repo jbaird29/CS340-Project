@@ -30,24 +30,28 @@
             {# The Browse {{entity}} section #}
             <br />
             <h3 class="mt-5">Browse {{ name }}</h3>
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        {% for key in table_data[0].keys() %}
-                        <th scope="col">{{ key.replace("_", " ") }}</th>
+            {% if not table_data %}
+                <p>No Data to Display!</p>
+            {% else %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            {% for key in table_data[0].keys() %}
+                            <th scope="col">{{ key.replace("_", " ") }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in table_data %}
+                        <tr>
+                            {% for key in row.keys() %}
+                            <td>{{row[key]}}</td>
+                            {% endfor %}
+                        </tr>
                         {% endfor %}
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for row in table_data %}
-                    <tr>
-                        {% for key in row.keys() %}
-                        <td>{{row[key]}}</td>
-                        {% endfor %}
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            {% endif %}
         </main>
 
         <script>

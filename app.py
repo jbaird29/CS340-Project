@@ -1,4 +1,4 @@
-from flask import Flask, render_template, json
+from flask import Flask, render_template, request, json
 import MySQLdb
 import os
 import database.db_queries as queries
@@ -24,7 +24,12 @@ def root():
 
 @app.route('/customer-contacts',methods=['GET'])
 def customer_contacts():
-    results = queries.select_all(conn, 'customer_contacts')
+    first_name = request.args.get('first_name')
+    last_name = request.args.get('last_name')
+    if not first_name and not last_name:
+        results = queries.select_all(conn, 'customer_contacts')
+    else:
+        results = queries.search_contacts(conn, first_name, last_name)
     return render_template("customer-contacts.j2", name="Customer Contacts", table_data=results)
 
 @app.route('/houses',methods=['GET'])
