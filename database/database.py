@@ -72,6 +72,9 @@ class Database:
             return True
         except Exception as e:
             print(e)
+            print('sql_table_name:', sql_table_name)
+            print('data:', data)
+            print('query:', query)
             logger.exception("Error running INSERT operation")
             return False
 
