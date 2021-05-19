@@ -104,5 +104,5 @@ def workers():
 
 # Listener
 if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 7513))    
-    app.run(port=port, debug=True) 
+    port = int(os.environ.get('PORT', 9597))    
+    app.run(port=port) 
