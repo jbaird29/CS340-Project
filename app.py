@@ -40,7 +40,8 @@ def customer_contacts():
     else:
         results = database.search_contacts(first_name, last_name)
     fields = database.get_table_fields('customer_contacts')
-    return render_template("customer-contacts.j2", name="Customer Contacts", fields=fields, table_data=results)
+    house_ids = database.select_house_ids()
+    return render_template("customer-contacts.j2", name="Customer Contacts", fields=fields, table_data=results, house_ids=house_ids)
 
 @app.route('/houses',methods=['GET'])
 def houses():

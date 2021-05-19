@@ -35,3 +35,16 @@ class Database:
         results = cursor.fetchall()
         print(results)
         return results
+
+    def select_house_ids(self) -> List:
+        """
+        Runs a SELECT id from houses query and returns the results as a List
+        Used top populate the dropdown list in the HTML form
+        """
+        query = f"""SELECT `id` FROM `houses` ORDER BY 1 ASC"""
+        cursor = self.conn.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(query, args=None)
+        self.conn.commit()
+        results = cursor.fetchall()
+        house_id_list = [result["id"] for result in results]
+        return house_id_list
