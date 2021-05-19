@@ -30,9 +30,9 @@
             <div class="col">
                 <label for="lawnmower_id">Lawnmower ID</label>
                 <select class="form-control" id="lawnmower_id">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
+                {% for id in lawnmower_ids %}
+                    <option>{{id}}</option>
+                {% endfor %}
                 </select>
             </div>
         </div>
