@@ -3,11 +3,11 @@
     <h1 class="mt-4 text-center">Job Workers Table</h1>
 
     <h3 class="mt-4">Add a New Job Worker</h3>
-    <form>
+    <form method="POST" action="/insert">
         <div class="row">
             <div class="col">
                 <label for="job_id">Job ID</label>
-                <select class="form-control" name="job_id" id="job_id">
+                <select required class="form-control" name="job_id" id="job_id">
                 {% for id in job_ids %}
                     <option>{{id}}</option>
                 {% endfor %}
@@ -15,13 +15,13 @@
             </div>
             <div class="col">
                 <label for="worker_id">Worker ID</label>
-                <select class="form-control" name="worker_id" id="worker_id">
+                <select required class="form-control" name="worker_id" id="worker_id">
                 {% for id in worker_ids %}
                     <option>{{id}}</option>
                 {% endfor %}
                 </select>
             </div>
         </div>
-        <button type="submit" class="btn btn-outline-light mt-2">Submit</button>
+        <button name="table_name" value="job_workers" type="submit" class="btn btn-outline-light mt-2">Submit</button>
     </form>
 {% endblock %}
