@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, json
+from flask import Flask, render_template, redirect, request, json
 import os
 from database.database import Database
 from dotenv import load_dotenv, find_dotenv
@@ -30,6 +30,17 @@ database = Database(host, user, passwd, db, schema)
 @app.route('/',methods=['GET'])
 def root():
     return render_template("index.j2")
+
+@app.route('/insert',methods=['POST'])
+def insert_request():
+    data = request.form.copy()
+    table_name = data.pop('table_name')
+    valid = database.insert_into(table_name, data)
+    if valid:
+        route_name = table_name.replace('_', '-')
+        return redirect(f'/{route_name}')
+    else:
+        return render_template("500-error.j2") 
 
 @app.route('/customer-contacts',methods=['GET'])
 def customer_contacts():
