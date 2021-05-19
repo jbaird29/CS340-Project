@@ -3,25 +3,27 @@
     <h1 class="mt-4 text-center">Workers Table</h1>
 
     <h3 class="mt-4">Add a New Worker</h3>
-    <form>
+    <form method="POST" action="/insert">
         <div class="row">
             <div class="col">
                 <label for="first_name">First Name</label>
-                <input type="text" class="form-control" id="first_name" />
+                <input required type="text" class="form-control" name="first_name" id="first_name" />
             </div>
             <div class="col">
                 <label for="last_name">Last Name</label>
-                <input type="text" class="form-control" id="last_name" />
+                <input required type="text" class="form-control" name="last_name" id="last_name" />
             </div>
             <div class="col">
                 <label for="date">Email</label>
-                <input type="email" class="form-control" id="email" />
+                <input required type="email" class="form-control" name="email" id="email" />
             </div>
             <div class="col">
                 <label for="phone_number">Phone Number</label>
                 <input
+                    required
                     type="tel"
                     class="form-control"
+                    name="phone_number"
                     id="phone_number"
                     pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
                     placeholder="Format: 999-999-999"
@@ -29,13 +31,13 @@
             </div>
             <div class="col">
                 <label for="lawnmower_id">Lawnmower ID</label>
-                <select class="form-control" id="lawnmower_id">
+                <select class="form-control" name="lawnmower_id" id="lawnmower_id">
                 {% for id in lawnmower_ids %}
                     <option>{{id}}</option>
                 {% endfor %}
                 </select>
             </div>
         </div>
-        <button type="submit" class="btn btn-outline-light mt-2">Submit</button>
+        <button name="table_name" value="workers" type="submit" class="btn btn-outline-light mt-2">Submit</button>
     </form>
 {% endblock %}
