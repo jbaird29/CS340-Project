@@ -36,48 +36,49 @@ def customer_contacts():
     first_name = request.args.get('first_name')
     last_name = request.args.get('last_name')
     if not first_name and not last_name:
-        results = database.select_all('customer_contacts')
+        table_data = database.select_all('customer_contacts')
     else:
-        results = database.search_contacts(first_name, last_name)
+        table_data = database.search_contacts(first_name, last_name)
     fields = database.get_table_fields('customer_contacts')
     house_ids = database.select_house_ids()
-    return render_template("customer-contacts.j2", name="Customer Contacts", fields=fields, table_data=results, house_ids=house_ids)
+    return render_template("customer-contacts.j2", name="Customer Contacts", fields=fields, table_data=table_data, house_ids=house_ids)
 
 @app.route('/houses',methods=['GET'])
 def houses():
-    results = database.select_all('houses')
+    table_data = database.select_all('houses')
     fields = database.get_table_fields('houses')
-    return render_template("houses.j2", name="Houses", fields=fields, table_data=results)
+    sales_manager_ids = database.select_house_ids()
+    return render_template("houses.j2", name="Houses", fields=fields, table_data=table_data, sales_manager_ids=sales_manager_ids)
 
 @app.route('/job-workers',methods=['GET'])
 def job_workers():
-    results = database.select_all('job_workers')
+    table_data = database.select_all('job_workers')
     fields = database.get_table_fields('job_workers')
-    return render_template("job-workers.j2", name="Job Workers", fields=fields, table_data=results)
+    return render_template("job-workers.j2", name="Job Workers", fields=fields, table_data=table_data)
 
 @app.route('/jobs',methods=['GET'])
 def jobs():
-    results = database.select_all('jobs')
+    table_data = database.select_all('jobs')
     fields = database.get_table_fields('jobs')
-    return render_template("jobs.j2", name="Jobs", fields=fields, table_data=results)
+    return render_template("jobs.j2", name="Jobs", fields=fields, table_data=table_data)
 
 @app.route('/lawnmowers',methods=['GET'])
 def lawnmowers():
-    results = database.select_all('lawnmowers')
+    table_data = database.select_all('lawnmowers')
     fields = database.get_table_fields('lawnmowers')
-    return render_template("lawnmowers.j2", name="Lawnmowers", fields=fields, table_data=results)
+    return render_template("lawnmowers.j2", name="Lawnmowers", fields=fields, table_data=table_data)
 
 @app.route('/sales-managers',methods=['GET'])
 def sales_managers():
-    results = database.select_all('sales_managers')
+    table_data = database.select_all('sales_managers')
     fields = database.get_table_fields('sales_managers')
-    return render_template("sales-managers.j2", name="Sales Managers", fields=fields, table_data=results)
+    return render_template("sales-managers.j2", name="Sales Managers", fields=fields, table_data=table_data)
 
 @app.route('/workers',methods=['GET'])
 def workers():
-    results = database.select_all('workers')
+    table_data = database.select_all('workers')
     fields = database.get_table_fields('workers')
-    return render_template("workers.j2", name="Workers", fields=fields, table_data=results)
+    return render_template("workers.j2", name="Workers", fields=fields, table_data=table_data)
 
 
 # Listener

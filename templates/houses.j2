@@ -35,9 +35,9 @@
             <div class="col">
                 <label for="sales_manager_id">Sales Manager ID</label>
                 <select class="form-control" name="sales_manager_id" id="sales_manager_id">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
+                    {% for id in sales_manager_ids %}
+                    <option>{{id}}</option>
+                    {% endfor %}
                 </select>
             </div>
         </div>

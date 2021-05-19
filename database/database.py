@@ -46,5 +46,18 @@ class Database:
         cursor.execute(query, args=None)
         self.conn.commit()
         results = cursor.fetchall()
-        house_id_list = [result["id"] for result in results]
-        return house_id_list
+        house_ids = [result["id"] for result in results]
+        return house_ids
+
+    def select_sales_manager_ids(self) -> List:
+        """
+        Runs a SELECT id from sales_managers query and returns the results as a List
+        Used top populate the dropdown list in the HTML form
+        """
+        query = f"""SELECT `id` FROM `sales_managers` ORDER BY 1 ASC"""
+        cursor = self.conn.cursor(MySQLdb.cursors.DictCursor)
+        cursor.execute(query, args=None)
+        self.conn.commit()
+        results = cursor.fetchall()
+        sales_manager_ids = [result["id"] for result in results]
+        return sales_manager_ids
