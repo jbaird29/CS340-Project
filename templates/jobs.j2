@@ -16,9 +16,9 @@
             <div class="col">
                 <label for="house_id">House ID</label>
                 <select class="form-control" name="house_i id="house_id">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
+                {% for id in house_ids %}
+                    <option>{{id}}</option>
+                {% endfor %}
                 </select>
             </div>
         </div>

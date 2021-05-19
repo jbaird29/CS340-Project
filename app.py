@@ -62,7 +62,8 @@ def job_workers():
 def jobs():
     table_data = database.select_all('jobs')
     fields = database.get_table_fields('jobs')
-    return render_template("jobs.j2", name="Jobs", fields=fields, table_data=table_data)
+    house_ids = database.select_ids('houses')
+    return render_template("jobs.j2", name="Jobs", fields=fields, table_data=table_data, house_ids=house_ids)
 
 @app.route('/lawnmowers',methods=['GET'])
 def lawnmowers():
