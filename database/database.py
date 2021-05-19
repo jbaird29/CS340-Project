@@ -51,9 +51,10 @@ class Database:
         ids = [result["id"] for result in results]
         return ids
 
-    def insert_into(self, sql_table_name: str, data: dict) -> None:
+    def insert_into(self, sql_table_name: str, data: dict) -> bool:
         """
         Given a table name and a dict of field_name:value pairs, inserts the data into table
+        Returns True if executed successfully, otherwise returns False
         """
         # helper lists
         fields = [key for key in data.keys()]

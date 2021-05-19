@@ -13,7 +13,7 @@ host = os.environ.get("340DBHOST")
 user = os.environ.get("340DBUSER")
 passwd = os.environ.get("340DBPW")
 db = os.environ.get("340DB")
-# enter the databae schema
+# input the database schema
 schema = {
     "customer_contacts": ["id", "first_name", "last_name", "email", "phone_number", "house_id"],
     "houses": ["id", "street_address", "street_address_2", "city", "state", "zip_code", "yard_size_acres", "sales_manager_id"],
@@ -33,47 +33,53 @@ def root():
 
 @app.route('/insert',methods=['POST'])
 def insert_request():
-    data = request.form.copy()
-    table_name = data.pop('table_name')
+    """This is the handler for EVERY insert operation; all forms POST to this route"""
+    # TODO: might want to add more server-side form validation; only have client-side right now
+    data: dict = request.form.copy()
+    # every form data has a "table_name" key:value pair (inputted from the submit button)
+    # this extracts it from the dict and uses it the table for the insert operation
+    table_name: str = data.pop('table_name')
     valid = database.insert_into(table_name, data)
     if valid:
         route_name = table_name.replace('_', '-')
-        return redirect(f'/{route_name}')
+        return redirect(f'/{route_name}')  # effectively refreshes the page and shows the newly added table_data
     else:
         return render_template("500-error.j2") 
 
 @app.route('/customer-contacts',methods=['GET'])
 def customer_contacts():
+    # first and last name query params are used for the "Search" functionality
     first_name = request.args.get('first_name')
     last_name = request.args.get('last_name')
+    # if no query params, show all data; otherwise, filter data based on the inputs
     if not first_name and not last_name:
         table_data = database.select_all('customer_contacts')
     else:
         table_data = database.search_contacts(first_name, last_name)
     fields = database.get_table_fields('customer_contacts')
-    house_ids = database.select_ids('houses')
+    house_ids = database.select_ids('houses')  # populates dropdown
     return render_template("customer-contacts.j2", name="Customer Contacts", fields=fields, table_data=table_data, house_ids=house_ids)
 
 @app.route('/houses',methods=['GET'])
 def houses():
     table_data = database.select_all('houses')
     fields = database.get_table_fields('houses')
-    sales_manager_ids = database.select_ids('sales_managers')
+    sales_manager_ids = database.select_ids('sales_managers')  # populates dropdown
     return render_template("houses.j2", name="Houses", fields=fields, table_data=table_data, sales_manager_ids=sales_manager_ids)
 
 @app.route('/job-workers',methods=['GET'])
 def job_workers():
     table_data = database.select_all('job_workers')
     fields = database.get_table_fields('job_workers')
-    job_ids = database.select_ids('jobs')
-    worker_ids = database.select_ids('workers')
+    job_ids = database.select_ids('jobs')  # populates dropdown
+    worker_ids = database.select_ids('workers')  # populates dropdown
     return render_template("job-workers.j2", name="Job Workers", fields=fields, table_data=table_data, job_ids=job_ids, worker_ids=worker_ids)
 
 @app.route('/jobs',methods=['GET'])
 def jobs():
     table_data = database.select_all('jobs')
     fields = database.get_table_fields('jobs')
-    house_ids = database.select_ids('houses')
+    house_ids = database.select_ids('houses')  # populates dropdown
     return render_template("jobs.j2", name="Jobs", fields=fields, table_data=table_data, house_ids=house_ids)
 
 @app.route('/lawnmowers',methods=['GET'])
@@ -92,12 +98,11 @@ def sales_managers():
 def workers():
     table_data = database.select_all('workers')
     fields = database.get_table_fields('workers')
-    lawnmower_ids = database.select_ids('lawnmowers')
+    lawnmower_ids = database.select_ids('lawnmowers')  # populates dropdown
     return render_template("workers.j2", name="Workers", fields=fields, table_data=table_data, lawnmower_ids=lawnmower_ids)
 
 
 # Listener
-
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 7513))    
     app.run(port=port, debug=True) 
