@@ -25,19 +25,17 @@
 
         <main role="main" class="container">
 
+            {# This holds the page-specific sections (i.e. search for customer contact) #}
             {% block main %}{% endblock %}
 
-            {# The Browse {{entity}} section #}
+            {# This is the "Browse {{entity}}"" section (which every page has) #}
             <br />
             <h3 class="mt-5">Browse {{ name }}</h3>
-            {% if not table_data %}
-                <p>No Data to Display!</p>
-            {% else %}
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            {% for key in table_data[0].keys() %}
-                            <th scope="col">{{ key.replace("_", " ") }}</th>
+                            {% for field in fields %}
+                            <th scope="col">{{ field.replace("_", " ") }}</th>
                             {% endfor %}
                         </tr>
                     </thead>
@@ -51,7 +49,6 @@
                         {% endfor %}
                     </tbody>
                 </table>
-            {% endif %}
         </main>
 
         <script>
