@@ -66,8 +66,14 @@ class Database:
         # create the SQL with %s placeholders
         query = f"""INSERT INTO {sql_table_name} ({fields_str})
         VALUES ({placeholder_str})"""
-        cursor = self.conn.cursor(MySQLdb.cursors.DictCursor)
+        # assert that every key in 'fields' is a valid field in this table; if not, return False
+        for field in fields:
+            if field not in self.schema[sql_table_name]:
+                print("There was a field in the dict which is not in the inputted database schema")
+                return False
+        # attempt to run the insert query
         try:
+            cursor = self.conn.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute(query, values)  # this replaces %s with the actual values
             self.conn.commit()
             return True
