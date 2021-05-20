@@ -10,7 +10,10 @@ class LennysDB:
     Represents the database connection and it schema, with methods to perform CRUD queries
     """
     def __init__(self, host, user, passwd, db) -> None:
-        self.conn = MySQLdb.connect(host, user, passwd, db)
+        self.host = host
+        self.user = user
+        self.passwd = passwd
+        self.db = db
         self.schema = {
             "customer_contacts": ["id", "first_name", "last_name", "email", "phone_number", "house_id"],
             "houses": ["id", "street_address", "street_address_2", "city", "state", "zip_code", "yard_size_acres", "sales_manager_id"],
@@ -51,11 +54,14 @@ class LennysDB:
     
     def select_all(self, sql_table_name) -> dict:
         """Given a table name, runs a SELECT * query and returns the results"""
+        conn = MySQLdb.connect(self.host, self.user, self.passwd, self.db)
         query = f"""SELECT * FROM {sql_table_name}"""
-        cursor = self.conn.cursor(MySQLdb.cursors.DictCursor)
+        cursor = conn.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(query, args=None)
-        self.conn.commit()
+        conn.commit()
         results = cursor.fetchall()
+        cursor.close()
+        conn.close()
         return results
 
     def search_contacts(self, first_name="", last_name="") -> dict:
@@ -63,31 +69,35 @@ class LennysDB:
         Given a first/last name, runs a SELECT * query with WHERE filter against
         the customer contacts table and returns the results
         """
+        conn = MySQLdb.connect(self.host, self.user, self.passwd, self.db)
         params = {
             "first_name": f"%{first_name}%",  # add % wildcard characters before and after
             "last_name": f"%{last_name}%"
         }
         query = self.sql["select"]["search_contacts"]
-        print(query)
-        print(params)
-        cursor = self.conn.cursor(MySQLdb.cursors.DictCursor)
+        cursor = conn.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(query, params)
-        self.conn.commit()
+        conn.commit()
         results = cursor.fetchall()
+        cursor.close()
+        conn.close()
         return results
 
     def get_jobs_total_price(self, house_id) -> int:
         """
         Calculates and returns a job's "total_price" as an int
         """
+        conn = MySQLdb.connect(self.host, self.user, self.passwd, self.db)
         query = self.sql["select"]["get_jobs_total_price"]
         params = {
             "house_id": house_id
         }
-        cursor = self.conn.cursor(MySQLdb.cursors.DictCursor)
+        cursor = conn.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(query, params)
-        self.conn.commit()
+        conn.commit()
         results = cursor.fetchall()
+        cursor.close()
+        conn.close()
         return results[0]["total_price"]
 
     def select_ids(self, sql_table_name) -> list:
@@ -95,12 +105,15 @@ class LennysDB:
         Runs a SELECT id from {sql_table_name} query and returns the results as a List
         Used top populate the dropdown list in the HTML form
         """
+        conn = MySQLdb.connect(self.host, self.user, self.passwd, self.db)
         query = f"""SELECT `id` FROM {sql_table_name} ORDER BY 1 ASC"""
-        cursor = self.conn.cursor(MySQLdb.cursors.DictCursor)
+        cursor = conn.cursor(MySQLdb.cursors.DictCursor)
         cursor.execute(query, args=None)
-        self.conn.commit()
+        conn.commit()
         results = cursor.fetchall()
         ids = [result["id"] for result in results]
+        cursor.close()
+        conn.close()
         return ids
 
     def insert_into(self, sql_table_name: str, data: dict) -> bool:
@@ -108,6 +121,7 @@ class LennysDB:
         Given a table name and a dict of field_name:value pairs, inserts the data into table
         Returns True if executed successfully, otherwise returns False
         """
+        conn = MySQLdb.connect(self.host, self.user, self.passwd, self.db)
         query = self.sql["insert"].get(sql_table_name)
         if query is None:
             print("That table name is not valid")
@@ -118,9 +132,9 @@ class LennysDB:
             data["total_price"] = self.get_jobs_total_price(house_id)
         # attempt to run the insert query
         try:
-            cursor = self.conn.cursor(MySQLdb.cursors.DictCursor)
+            cursor = conn.cursor(MySQLdb.cursors.DictCursor)
             cursor.execute(query, data)  # this replaces %s with the actual values
-            self.conn.commit()
+            conn.commit()
             return True
         except Exception as e:
             print(e)
@@ -129,4 +143,7 @@ class LennysDB:
             print('query:', query)
             logger.exception("Error running INSERT operation")
             return False
+        finally:
+            cursor.close()
+            conn.close()
 
