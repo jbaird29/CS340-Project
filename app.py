@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, request, json
 import os
-from database.database import Database
+from database.database import LennysDB
 from dotenv import load_dotenv, find_dotenv
 
 
@@ -13,23 +13,17 @@ host = os.environ.get("340DBHOST")
 user = os.environ.get("340DBUSER")
 passwd = os.environ.get("340DBPW")
 db = os.environ.get("340DB")
-# input the database schema
-schema = {
-    "customer_contacts": ["id", "first_name", "last_name", "email", "phone_number", "house_id"],
-    "houses": ["id", "street_address", "street_address_2", "city", "state", "zip_code", "yard_size_acres", "sales_manager_id"],
-    "jobs": ["id", "date", "total_price", "house_id"],
-    "job_workers": ["job_id", "worker_id"],
-    "lawnmowers": ["id", "brand", "make_year", "model_name", "is_functional"],
-    "sales_managers": ["id", "region", "first_name", "last_name", "email", "phone_number"],
-    "workers": ["id", "first_name", "last_name", "email", "phone_number", "lawnmower_id"],
-}
 # instantiate a Database for ease of running queries
-database = Database(host, user, passwd, db, schema)
+database = LennysDB(host, user, passwd, db)
 
 # Routes 
 @app.route('/',methods=['GET'])
 def root():
     return render_template("index.j2")
+
+@app.route('/500',methods=['GET'])
+def server_err():
+    return render_template("500-error.j2") 
 
 @app.route('/insert',methods=['POST'])
 def insert_request():
@@ -44,7 +38,7 @@ def insert_request():
         route_name = table_name.replace('_', '-')
         return redirect(f'/{route_name}')  # effectively refreshes the page and shows the newly added table_data
     else:
-        return render_template("500-error.j2") 
+        return redirect("/500") 
 
 @app.route('/customer-contacts',methods=['GET'])
 def customer_contacts():
@@ -105,4 +99,4 @@ def workers():
 # Listener
 if __name__ == "__main__":
     port = int(os.environ.get('PORT', 9597))    
-    app.run(port=port) 
+    app.run(port=port, debug=True) 
