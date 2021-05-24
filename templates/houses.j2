@@ -68,17 +68,39 @@
             <td>{{row[key]}}</td>
             {% endfor %}
             <td>
-            <form method="POST" action="/update-houses-sales-manager">
+                <button type="button" class="btn btn-outline-light btn-sm" data-bs-toggle="modal" 
+                    data-bs-target="#modal-update-{{row['id']}}">
+                    Update
+                </button>            
+            </td>
+        </tr>
+
+        
+
+        <div class="modal fade" id="modal-update-{{row['id']}}" 
+        tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update this Sales Manager ID</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="/update-houses-sales-manager">
                 <select class="form-control" name="sales_manager_id" id="sales_manager_id">
-                    {% for row in sales_manager_ids %}
-                    <option value="{{row['id']}}">{{row['id']}} ({{row['email']}})</option>
+                    {% for manager_row in sales_manager_ids %}
+                    {% if row['sales_manager_id'] == manager_row['id'] %}{% set selected = "selected" %}{% endif %}
+                    <option {{ selected }} value="{{manager_row['id']}}">{{manager_row['id']}} ({{manager_row['email']}})</option>
                     {% endfor %}
-                    <option value="">NULL</option>
+                    {% if not row['sales_manager_id'] %}{% set selected = "selected" %}{% endif %}
+                    <option {{ selected }} value="">NULL</option>
                 </select>
                 <button name="id" value="{{row['id']}}" type="submit" class="btn btn-outline-light btn-sm">Submit</button>
             </form>
-            </td>
-        </tr>
+            </div>
+        </div>
+        </div>
+        </div>
         {% endfor %}
     </tbody>
 </table>
