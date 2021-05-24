@@ -52,7 +52,8 @@ class LennysDB:
                     VALUES (%(first_name)s, %(last_name)s, %(email)s, %(phone_number)s, %(house_id)s)""",
             },
             "delete": {
-                "sales_manager": """DELETE FROM `sales_managers` WHERE `id` = %(sales_manager_id)s"""
+                "sales_manager": """DELETE FROM `sales_managers` WHERE `id` = %(sales_manager_id)s""",
+                "job_worker": """DELETE FROM `job_workers` WHERE `job_id` = %(job_id)s AND `worker_id` = %(worker_id)s"""
             },
             "update": {
                 "lawnmower_status": """UPDATE `lawnmowers` SET `is_functional` = %(is_functional)s 
@@ -235,6 +236,21 @@ class LennysDB:
         except Exception as e:
             print(e)
             logger.exception("Error running UPDATE job worker")
+            return False
+
+    def delete_job_worker(self, job_id, worker_id):
+        """Delete a job worker table entry"""
+        query = self.sql["delete"]["job_worker"]
+        args = {
+            "job_id": job_id,
+            "worker_id": worker_id,
+        }
+        try:
+            self._execute_query(query, args)
+            return True
+        except Exception as e:
+            print(e)
+            logger.exception("Error running DELETE job worker")
             return False
 
 

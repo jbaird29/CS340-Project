@@ -81,6 +81,16 @@ def update_job_worker():
     else:
         return redirect("/500")
 
+@app.route('/delete-job-worker', methods=['POST'])
+def delete_job_woker():
+    job_id = request.form.get('job_id')
+    worker_id = request.form.get('worker_id')
+    valid = database.delete_job_worker(job_id, worker_id)
+    if valid:
+        return redirect('/job-workers')
+    else:
+        return redirect("/500")
+
 @app.route('/customer-contacts',methods=['GET'])
 def customer_contacts():
     # first and last name query params are used for the "Search" functionality
