@@ -56,7 +56,9 @@ class LennysDB:
             },
             "update": {
                 "lawnmower_status": """UPDATE `lawnmowers` SET `is_functional` = %(is_functional)s 
-                    WHERE `id` = %(lawnmower_id)s"""
+                    WHERE `id` = %(lawnmower_id)s""",
+                "houses_sales_manager": """UPDATE `houses` SET `sales_manager_id` = %(sales_manager_id)s
+                    WHERE `id` = %(house_id)s"""
             }
         }
 
@@ -191,6 +193,22 @@ class LennysDB:
         args = {
             "lawnmower_id": lawnmower_id,
             "is_functional": is_functional
+        }
+        try:
+            self._execute_query(query, args)
+            return True
+        except Exception as e:
+            print(e)
+            logger.exception("Error running UPDATE lawnmower status")
+            return False
+
+    def update_houses_sales_manager(self, house_id: int, sales_manager_id: int):
+        """Updates a house's sales manager"""
+        query = self.sql["update"]["houses_sales_manager"]
+        sales_manager_id = None if sales_manager_id == "" else sales_manager_id
+        args = {
+            "house_id": house_id,
+            "sales_manager_id": sales_manager_id
         }
         try:
             self._execute_query(query, args)

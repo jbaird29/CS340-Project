@@ -59,6 +59,16 @@ def update_lawnmower_status():
     else:
         return redirect("/500")
 
+@app.route('/update-houses-sales-manager', methods=['POST'])
+def update_houses_sales_manager():
+    house_id = request.form.get('id')
+    sales_manager_id = request.form.get('sales_manager_id')
+    valid = database.update_houses_sales_manager(house_id, sales_manager_id)
+    if valid:
+        return redirect('/houses')
+    else:
+        return redirect("/500")
+
 @app.route('/customer-contacts',methods=['GET'])
 def customer_contacts():
     # first and last name query params are used for the "Search" functionality

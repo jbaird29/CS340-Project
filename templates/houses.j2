@@ -42,7 +42,7 @@
                     {% for row in sales_manager_ids %}
                     <option value="{{row['id']}}">{{row['id']}} ({{row['email']}})</option>
                     {% endfor %}
-                    <option value="">[None]</option>
+                    <option value="">NULL</option>
                 </select>
             </div>
         </div>
@@ -58,6 +58,7 @@
             {% for field in fields %}
             <th scope="col">{{ field.replace("_", " ") }}</th>
             {% endfor %}
+            <th>update sales manager id</th>
         </tr>
     </thead>
     <tbody>
@@ -66,6 +67,17 @@
             {% for key in row.keys() %}
             <td>{{row[key]}}</td>
             {% endfor %}
+            <td>
+            <form method="POST" action="/update-houses-sales-manager">
+                <select class="form-control" name="sales_manager_id" id="sales_manager_id">
+                    {% for row in sales_manager_ids %}
+                    <option value="{{row['id']}}">{{row['id']}} ({{row['email']}})</option>
+                    {% endfor %}
+                    <option value="">NULL</option>
+                </select>
+                <button name="id" value="{{row['id']}}" type="submit" class="btn btn-outline-light btn-sm">Submit</button>
+            </form>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
