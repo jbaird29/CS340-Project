@@ -31,7 +31,9 @@ class LennysDB:
                     WHERE `id` = %(house_id)s""",
                 "select_house_ids": """SELECT `id`, `street_address` FROM `houses` ORDER BY 1 ASC""",
                 "select_job_ids": """SELECT `id`, `date`, `house_id` FROM `jobs` ORDER BY 1 ASC""",
-                "select_worker_ids": """SELECT `id`, `email` FROM `workers` ORDER BY 1 ASC"""
+                "select_worker_ids": """SELECT `id`, `email` FROM `workers` ORDER BY 1 ASC""",
+                "select_lawnmower_ids": """SELECT `id`, `model_name`, `make_year` FROM `lawnmowers` ORDER BY 1 ASC""",
+                "select_sales_manager_ids": """SELECT `id`, `email` FROM `sales_managers` ORDER BY 1 ASC"""
             },
             "insert": {
                 "jobs": """INSERT INTO `jobs` (`date`, `total_price`, `house_id`)
@@ -114,6 +116,18 @@ class LennysDB:
     def select_worker_ids(self) -> list:
         """Used top populate the dropdown list in the HTML form; returns (id, email)[]"""
         query = self.sql["select"]["select_worker_ids"]
+        results = self._execute_query(query)
+        return results
+
+    def select_lawnmower_ids(self) -> list:
+        """Used top populate the dropdown list in the HTML form; returns (id, model_name, make_year)[]"""
+        query = self.sql["select"]["select_lawnmower_ids"]
+        results = self._execute_query(query)
+        return results
+
+    def select_sales_manager_ids(self) -> list:
+        """Used top populate the dropdown list in the HTML form; returns (id, email)[]"""
+        query = self.sql["select"]["select_sales_manager_ids"]
         results = self._execute_query(query)
         return results
 

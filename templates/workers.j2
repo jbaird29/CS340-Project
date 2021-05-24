@@ -32,8 +32,8 @@
             <div class="col">
                 <label for="lawnmower_id">Lawnmower ID</label>
                 <select class="form-control" name="lawnmower_id" id="lawnmower_id">
-                {% for id in lawnmower_ids %}
-                    <option>{{id}}</option>
+                {% for row in lawnmower_ids %}
+                    <option value="{{row['id']}}">{{row['id']}} ({{row['model_name']}}, {{row['make_year']}})</option>
                 {% endfor %}
                 </select>
             </div>

@@ -41,14 +41,14 @@ SELECT `id`, `email` FROM `workers` ORDER BY 1 ASC
 INSERT INTO `workers` (`first_name`, `last_name`, `email`, `phone_number`, `lawnmower_id`)
 VALUES (%(first_name)s, %(last_name)s, %(email)s, %(phone_number)s, %(lawnmower_id)s)
 -- add a new worker: populate the lawnmower_id dropdown
-SELECT `id` FROM `lawnmowers` ORDER BY 1 ASC
+SELECT `id`, `model_name`, `make_year` FROM `lawnmowers` ORDER BY 1 ASC
 
 -- add a new house
 INSERT INTO `houses` (`street_address`, `street_address_2`, `city`, `state`, `zip_code`, `yard_size_acres`, `sales_manager_id`)
 VALUES (%(street_address)s, %(street_address_2)s, %(city)s, %(state)s, %(zip_code)s, %(yard_size_acres)s, %(sales_manager_id)s)
 
 -- add a new house: populate the sales manager id dropdown
-SELECT `id` FROM `sales_managers` ORDER BY 1 ASC
+SELECT `id`, `email` FROM `sales_managers` ORDER BY 1 ASC
 
 -- add a new lawnmower
 INSERT INTO `lawnmowers` (`brand`, `make_year`, `model_name`, `is_functional`)
@@ -63,7 +63,7 @@ INSERT INTO `customer_contacts` (`first_name`, `last_name`, `email`, `phone_numb
 VALUES (%(first_name)s, %(last_name)s, %(email)s, %(phone_number)s, %(house_id)s)
 
 -- add a new customer contact: populate the house id dropdown
-SELECT `id` FROM `houses` ORDER BY 1 ASC
+SELECT `id`, `street_address` FROM `houses` ORDER BY 1 ASC
 
 -------------------------------------------------
 -- UPDATE [ENTITY] SECTIONS ------------------

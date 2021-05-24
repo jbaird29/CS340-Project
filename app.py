@@ -51,14 +51,14 @@ def customer_contacts():
     else:
         table_data = database.search_contacts(first_name, last_name)
     fields = database.get_table_fields('customer_contacts')
-    house_ids = database.select_ids('houses')  # populates dropdown
+    house_ids = database.select_house_ids()  # populates dropdown
     return render_template("customer-contacts.j2", name="Customer Contacts", fields=fields, table_data=table_data, house_ids=house_ids)
 
 @app.route('/houses',methods=['GET'])
 def houses():
     table_data = database.select_all('houses')
     fields = database.get_table_fields('houses')
-    sales_manager_ids = database.select_ids('sales_managers')  # populates dropdown
+    sales_manager_ids = database.select_sales_manager_ids()  # populates dropdown
     return render_template("houses.j2", name="Houses", fields=fields, table_data=table_data, sales_manager_ids=sales_manager_ids)
 
 @app.route('/job-workers',methods=['GET'])
@@ -92,7 +92,7 @@ def sales_managers():
 def workers():
     table_data = database.select_all('workers')
     fields = database.get_table_fields('workers')
-    lawnmower_ids = database.select_ids('lawnmowers')  # populates dropdown
+    lawnmower_ids = database.select_lawnmower_ids()  # populates dropdown
     return render_template("workers.j2", name="Workers", fields=fields, table_data=table_data, lawnmower_ids=lawnmower_ids)
 
 

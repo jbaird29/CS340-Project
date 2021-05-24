@@ -39,8 +39,8 @@
             <div class="col">
                 <label for="sales_manager_id">Sales Manager ID</label>
                 <select class="form-control" name="sales_manager_id" id="sales_manager_id">
-                    {% for id in sales_manager_ids %}
-                    <option>{{id}}</option>
+                    {% for row in sales_manager_ids %}
+                    <option value="{{row['id']}}">{{row['id']}} ({{row['email']}})</option>
                     {% endfor %}
                 </select>
             </div>
