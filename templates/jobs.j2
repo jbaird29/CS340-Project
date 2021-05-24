@@ -34,6 +34,7 @@
             {% for field in fields %}
             <th scope="col">{{ field.replace("_", " ") }}</th>
             {% endfor %}
+            <th>Delete</th>
         </tr>
     </thead>
     <tbody>
@@ -42,6 +43,13 @@
             {% for key in row.keys() %}
             <td>{{row[key]}}</td>
             {% endfor %}
+
+            <td>
+            <form method="POST" action="/delete-job">
+                <button name="id" value="{{row['id']}}" type="submit" class="btn btn-outline-light btn-sm">Delete</button>
+            </form>
+            </td>
+
         </tr>
         {% endfor %}
     </tbody>
