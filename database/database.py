@@ -131,16 +131,6 @@ class LennysDB:
         results = self._execute_query(query)
         return results
 
-    def select_ids(self, sql_table_name) -> list:
-        """
-        Runs a SELECT id from {sql_table_name} query and returns the results as a List
-        Used top populate the dropdown list in the HTML form
-        """
-        query = f"""SELECT `id` FROM {sql_table_name} ORDER BY 1 ASC"""
-        results = self._execute_query(query) 
-        ids = [result["id"] for result in results]
-        return ids
-
     def insert_into(self, sql_table_name: str, data: dict) -> bool:
         """
         Given a table name and a dict of field_name:value pairs, inserts the data into table
