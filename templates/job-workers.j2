@@ -46,23 +46,10 @@
             {% endfor %}
             
             <td>
-            <div class="row">
-            <form method="POST" action="/update-job-worker">
-                <input type="hidden" name="old_job_id" value="{{row['job_id']}}" />
-                <input type="hidden" name="old_worker_id" value="{{row['worker_id']}}" />
-                <select required class="form-control" name="new_job_id" id="job_id">
-                {% for row in job_ids %}
-                    <option value="{{row['id']}}">{{row['id']}} ({{row['date']}}, HouseID: {{row['house_id']}})</option>
-                {% endfor %}
-                </select>
-                <select required class="form-control" name="new_worker_id" id="worker_id">
-                {% for row in worker_ids %}
-                    <option value="{{row['id']}}">{{row['id']}} ({{row['email']}})</option>
-                {% endfor %}
-                </select>
-                <button type="submit" class="btn btn-outline-light btn-sm">Submit</button>
-            </form>
-            </div>
+                <button type="button" class="btn btn-outline-light btn-sm" data-bs-toggle="modal" 
+                    data-bs-target="#modal-{{ row['job_id'] }}-{{ row['worker_id'] }}">
+                    Update
+                </button>            
             </td>
 
             <td>
@@ -74,6 +61,46 @@
             </td>
 
         </tr>
+        
+        <div class="modal fade" id="modal-{{ row['job_id'] }}-{{ row['worker_id'] }}" 
+        tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update this Row</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="/update-job-worker">
+
+                    <input type="hidden" name="old_job_id" value="{{row['job_id']}}" />
+                    <input type="hidden" name="old_worker_id" value="{{row['worker_id']}}" />
+
+                    <select required class="form-control" name="new_job_id" id="job_id">
+                    {% for job_row in job_ids %}
+                        {% if row['job_id'] == job_row['id'] %}{% set selected = "selected" %}{% endif %}
+                        <option {{ selected }} value="{{job_row['id']}}">
+                            {{job_row['id']}} ({{job_row['date']}}, HouseID: {{job_row['house_id']}})
+                        </option>
+                    {% endfor %}
+                    </select>
+
+                    <select required class="form-control" name="new_worker_id" id="worker_id">
+                    {% for worker_row in worker_ids %}
+                        {% if row['worker_id'] == worker_row['id'] %}{% set selected = "selected" %}{% endif %}
+                        <option {{ selected }} value="{{worker_row['id']}}">
+                            {{worker_row['id']}} ({{worker_row['email']}})
+                        </option>
+                    {% endfor %}
+                    </select>
+                    
+                    <button type="submit" class="btn btn-outline-light btn-sm">Submit</button>
+                </form>
+            </div>
+        </div>
+        </div>
+        </div>
+
         {% endfor %}
     </tbody>
 </table>
