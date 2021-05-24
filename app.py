@@ -65,15 +65,15 @@ def houses():
 def job_workers():
     table_data = database.select_all('job_workers')
     fields = database.get_table_fields('job_workers')
-    job_ids = database.select_ids('jobs')  # populates dropdown
-    worker_ids = database.select_ids('workers')  # populates dropdown
+    job_ids = database.select_job_ids()  # populates dropdown
+    worker_ids = database.select_worker_ids()  # populates dropdown
     return render_template("job-workers.j2", name="Job Workers", fields=fields, table_data=table_data, job_ids=job_ids, worker_ids=worker_ids)
 
 @app.route('/jobs',methods=['GET'])
 def jobs():
     table_data = database.select_all('jobs')
     fields = database.get_table_fields('jobs')
-    house_ids = database.select_ids('houses')  # populates dropdown
+    house_ids = database.select_house_ids()  # populates dropdown
     return render_template("jobs.j2", name="Jobs", fields=fields, table_data=table_data, house_ids=house_ids)
 
 @app.route('/lawnmowers',methods=['GET'])

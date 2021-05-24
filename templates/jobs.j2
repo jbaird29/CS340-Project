@@ -17,8 +17,8 @@
             <div class="col">
                 <label for="house_id">House ID</label>
                 <select class="form-control" name="house_id" id="house_id">
-                {% for id in house_ids %}
-                    <option>{{id}}</option>
+                {% for row in house_ids %}
+                    <option value="{{row['id']}}">{{row['id']}} ({{row['street_address']}})</option>
                 {% endfor %}
                 </select>
             </div>

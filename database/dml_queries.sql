@@ -25,17 +25,17 @@ VALUES (%(date)s, %(total_price_calculation)s, %(house_id)s)
 SELECT 50 * `yard_size_acres` AS total_price FROM `houses` WHERE `id` = %(house_id)s
 
 -- add a new job: populate the house id dropdown
-SELECT `id` FROM `houses` ORDER BY 1 ASC
+SELECT `id`, `street_address` FROM `houses` ORDER BY 1 ASC
 
 -- add a new job worker
 INSERT INTO `job_workers` (`job_id`, `worker_id`)
 VALUES (%(job_id)s, %(worker_id)s)
 
 -- add a new job worker: populate the job_id dropdown
-SELECT `id` FROM `jobs` ORDER BY 1 ASC
+SELECT `id`, `date`, `house_id` FROM `jobs` ORDER BY 1 ASC
 
 -- add a new job worker: populate the worker_id dropdown
-SELECT `id` FROM `workers` ORDER BY 1 ASC
+SELECT `id`, `email` FROM `workers` ORDER BY 1 ASC
 
 -- add a new worker
 INSERT INTO `workers` (`first_name`, `last_name`, `email`, `phone_number`, `lawnmower_id`)

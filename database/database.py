@@ -29,6 +29,9 @@ class LennysDB:
                     WHERE `first_name` LIKE %(first_name)s AND `last_name` LIKE %(last_name)s""",
                 "get_jobs_total_price": """SELECT 50 * `yard_size_acres` AS total_price FROM `houses` 
                     WHERE `id` = %(house_id)s""",
+                "select_house_ids": """SELECT `id`, `street_address` FROM `houses` ORDER BY 1 ASC""",
+                "select_job_ids": """SELECT `id`, `date`, `house_id` FROM `jobs` ORDER BY 1 ASC""",
+                "select_worker_ids": """SELECT `id`, `email` FROM `workers` ORDER BY 1 ASC"""
             },
             "insert": {
                 "jobs": """INSERT INTO `jobs` (`date`, `total_price`, `house_id`)
@@ -95,6 +98,24 @@ class LennysDB:
         }
         results = self._execute_query(query, args)
         return results[0]["total_price"]  # there will only be one row at index 0
+    
+    def select_house_ids(self) -> list:
+        """Used top populate the dropdown list in the HTML form; returns (id, street_address)[]"""
+        query = self.sql["select"]["select_house_ids"]
+        results = self._execute_query(query)
+        return results
+    
+    def select_job_ids(self) -> list:
+        """Used top populate the dropdown list in the HTML form; returns (id, date, house_id)[]"""
+        query = self.sql["select"]["select_job_ids"]
+        results = self._execute_query(query)
+        return results
+
+    def select_worker_ids(self) -> list:
+        """Used top populate the dropdown list in the HTML form; returns (id, email)[]"""
+        query = self.sql["select"]["select_worker_ids"]
+        results = self._execute_query(query)
+        return results
 
     def select_ids(self, sql_table_name) -> list:
         """
