@@ -40,6 +40,15 @@ def insert_request():
     else:
         return redirect("/500") 
 
+@app.route('/delete-sales-manager',methods=['POST'])
+def delete_sales_manager():
+    sales_manager_id = request.form.get('id')
+    valid = database.delete_sales_manager(sales_manager_id)
+    if valid:
+        return redirect('/sales-managers')
+    else:
+        return redirect("/500")
+
 @app.route('/customer-contacts',methods=['GET'])
 def customer_contacts():
     # first and last name query params are used for the "Search" functionality

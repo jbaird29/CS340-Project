@@ -32,7 +32,7 @@ CREATE TABLE `customer_contacts` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `unique_email` (`email`),
   KEY `house_id` (`house_id`),
-  CONSTRAINT `customer_contacts_ibfk_1` FOREIGN KEY (`house_id`) REFERENCES `houses` (`id`)
+  CONSTRAINT `customer_contacts_ibfk_1` FOREIGN KEY (`house_id`) REFERENCES `houses` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -64,7 +64,7 @@ CREATE TABLE `houses` (
   `sales_manager_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `sales_manager_id` (`sales_manager_id`),
-  CONSTRAINT `houses_ibfk_1` FOREIGN KEY (`sales_manager_id`) REFERENCES `sales_managers` (`id`)
+  CONSTRAINT `houses_ibfk_1` FOREIGN KEY (`sales_manager_id`) REFERENCES `sales_managers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -117,10 +117,10 @@ CREATE TABLE `jobs` (
   `id` int NOT NULL AUTO_INCREMENT,
   `date` date NOT NULL,
   `total_price` decimal(10,2) NOT NULL,
-  `house_id` int NOT NULL,
+  `house_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `house_id` (`house_id`),
-  CONSTRAINT `jobs_ibfk_1` FOREIGN KEY (`house_id`) REFERENCES `houses` (`id`)
+  CONSTRAINT `jobs_ibfk_1` FOREIGN KEY (`house_id`) REFERENCES `houses` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -230,4 +230,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-24 15:23:08
+-- Dump completed on 2021-05-24 16:31:56

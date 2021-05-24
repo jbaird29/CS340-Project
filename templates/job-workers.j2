@@ -26,3 +26,24 @@
         <span>* indicates a required field</span>
     </form>
 {% endblock %}
+
+{% block browse %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            {% for field in fields %}
+            <th scope="col">{{ field.replace("_", " ") }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in table_data %}
+        <tr>
+            {% for key in row.keys() %}
+            <td>{{row[key]}}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

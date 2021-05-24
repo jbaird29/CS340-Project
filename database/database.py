@@ -50,6 +50,9 @@ class LennysDB:
                     VALUES (%(region)s, %(first_name)s, %(last_name)s, %(email)s, %(phone_number)s)""",
                 "customer_contacts": """INSERT INTO `customer_contacts` (`first_name`, `last_name`, `email`, `phone_number`, `house_id`)
                     VALUES (%(first_name)s, %(last_name)s, %(email)s, %(phone_number)s, %(house_id)s)""",
+            },
+            "delete": {
+                "sales_manager": """DELETE FROM `sales_managers` WHERE `id` = %(sales_manager_id)s"""
             }
         }
 
@@ -138,6 +141,7 @@ class LennysDB:
         """
         query = self.sql["insert"].get(sql_table_name)
         args = data
+        print(args)
         if query is None:
             print("That table name is not valid")
             return False
@@ -145,6 +149,23 @@ class LennysDB:
         if sql_table_name == "jobs":
             house_id = args["house_id"]
             args["total_price"] = self.get_jobs_total_price(house_id)
+        if sql_table_name == "houses":
+            args["sales_manager_id"] = None if args["sales_manager_id"] == "" else args["sales_manager_id"]
+            print('New args', args)
+        try:
+            self._execute_query(query, args)
+            return True
+        except Exception as e:
+            print(e)
+            logger.exception("Error running INSERT operation")
+            return False
+    
+    def delete_sales_manager(self, sales_manager_id: int):
+        """Given a sales_manager_id, deletes that record"""
+        query = self.sql["delete"]["sales_manager"]
+        args = {
+            "sales_manager_id": sales_manager_id
+        }
         try:
             self._execute_query(query, args)
             return True

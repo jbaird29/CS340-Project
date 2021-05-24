@@ -37,15 +37,37 @@
                     {# pattern="[0-9]{1,6}[.][0-9]{2}" #}
             </div>
             <div class="col">
-                <label for="sales_manager_id">Sales Manager ID*</label>
+                <label for="sales_manager_id">Sales Manager ID</label>
                 <select class="form-control" name="sales_manager_id" id="sales_manager_id">
                     {% for row in sales_manager_ids %}
                     <option value="{{row['id']}}">{{row['id']}} ({{row['email']}})</option>
                     {% endfor %}
+                    <option value="">[None]</option>
                 </select>
             </div>
         </div>
         <button name="table_name" value="houses" type="submit" class="btn btn-outline-light mt-2">Submit</button>
         <span>* indicates a required field</span>
     </form>
+{% endblock %}
+
+{% block browse %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            {% for field in fields %}
+            <th scope="col">{{ field.replace("_", " ") }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in table_data %}
+        <tr>
+            {% for key in row.keys() %}
+            <td>{{row[key]}}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}
