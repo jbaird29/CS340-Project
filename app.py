@@ -49,6 +49,16 @@ def delete_sales_manager():
     else:
         return redirect("/500")
 
+@app.route('/update-lawnmower-status', methods=['POST'])
+def update_lawnmower_status():
+    lawnmower_id = request.form.get('id')
+    is_functional = request.form.get('is_functional')
+    valid = database.update_lawnmower_status(lawnmower_id, is_functional)
+    if valid:
+        return redirect('/lawnmowers')
+    else:
+        return redirect("/500")
+
 @app.route('/customer-contacts',methods=['GET'])
 def customer_contacts():
     # first and last name query params are used for the "Search" functionality
@@ -87,7 +97,7 @@ def jobs():
 
 @app.route('/lawnmowers',methods=['GET'])
 def lawnmowers():
-    table_data = database.select_all('lawnmowers')
+    table_data = database.select_all_lawnmowers()
     fields = database.get_table_fields('lawnmowers')
     return render_template("lawnmowers.j2", name="Lawnmowers", fields=fields, table_data=table_data)
 

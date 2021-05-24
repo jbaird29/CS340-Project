@@ -53,6 +53,10 @@ class LennysDB:
             },
             "delete": {
                 "sales_manager": """DELETE FROM `sales_managers` WHERE `id` = %(sales_manager_id)s"""
+            },
+            "update": {
+                "lawnmower_status": """UPDATE `lawnmowers` SET `is_functional` = %(is_functional)s 
+                    WHERE `id` = %(lawnmower_id)s"""
             }
         }
 
@@ -77,6 +81,13 @@ class LennysDB:
     def select_all(self, sql_table_name) -> dict:
         """Given a table name, runs a SELECT * query and returns the results"""
         query = f"""SELECT * FROM {sql_table_name}"""
+        results = self._execute_query(query) 
+        return results
+
+    def select_all_lawnmowers(self) -> dict:
+        """Runs a SELECT * of all lawnmowers; changes 1 and 0 to Yes and No"""
+        query = f"""SELECT `id`, `brand`, `make_year`, `model_name`, 
+        CASE WHEN `is_functional` = 1 THEN "Yes" ELSE "No" END AS is_functional FROM `lawnmowers` """
         results = self._execute_query(query) 
         return results
 
@@ -171,6 +182,21 @@ class LennysDB:
             return True
         except Exception as e:
             print(e)
-            logger.exception("Error running INSERT operation")
+            logger.exception("Error running DELETE sales manager")
+            return False
+
+    def update_lawnmower_status(self, lawnmower_id: int, is_functional: int):
+        """Updates whether a lawnmower is functional or not"""
+        query = self.sql["update"]["lawnmower_status"]
+        args = {
+            "lawnmower_id": lawnmower_id,
+            "is_functional": is_functional
+        }
+        try:
+            self._execute_query(query, args)
+            return True
+        except Exception as e:
+            print(e)
+            logger.exception("Error running UPDATE lawnmower status")
             return False
 

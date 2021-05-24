@@ -37,6 +37,7 @@
             {% for field in fields %}
             <th scope="col">{{ field.replace("_", " ") }}</th>
             {% endfor %}
+            <th>Update Functional Status</th>
         </tr>
     </thead>
     <tbody>
@@ -45,6 +46,13 @@
             {% for key in row.keys() %}
             <td>{{row[key]}}</td>
             {% endfor %}
+            <td>
+            <form method="POST" action="/update-lawnmower-status">
+                <input type="hidden" name="id" value="{{row['id']}}" />
+                <button name="is_functional" value="1" type="submit" class="btn btn-outline-light btn-sm">Functional</button>
+                <button name="is_functional" value="0" type="submit" class="btn btn-outline-light btn-sm">Disabled</button>
+            </form>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
