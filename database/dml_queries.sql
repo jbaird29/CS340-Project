@@ -12,24 +12,19 @@ SELECT * FROM `customer_contacts`
 
 
 -------------------------------------------------
--- ADD A NEW [ENTITY] SECTIONS ------------------
+-- OTHER SELECT STATEMENTS ------------------
 -------------------------------------------------
--- these are for the Add a new ENTITY sections of each page of the site
--- the syntax {)s denotes where user input will be inserted into the query
+-- these are misc select statements, eg for purposes of populating drop down menus
+-- the syntax %()s denotes where user input will be inserted into the query
 
--- add a new job
-INSERT INTO `jobs` (`date`, `total_price`, `house_id`)
-VALUES (%(date)s, %(total_price_calculation)s, %(house_id)s)
-
--- add a new job: perform the total_price_calculation referenced above
-SELECT 50 * `yard_size_acres` AS total_price FROM `houses` WHERE `id` = %(house_id)s
-
--- add a new job: populate the house id dropdown
+-- add a new customer contact: populate the house id dropdown
 SELECT `id`, `street_address` FROM `houses` ORDER BY 1 ASC
 
--- add a new job worker
-INSERT INTO `job_workers` (`job_id`, `worker_id`)
-VALUES (%(job_id)s, %(worker_id)s)
+-- add a new house: populate the sales manager id dropdown
+SELECT `id`, `email` FROM `sales_managers` ORDER BY 1 ASC
+
+-- add a new worker: populate the lawnmower_id dropdown
+SELECT `id`, `model_name`, `make_year` FROM `lawnmowers` ORDER BY 1 ASC
 
 -- add a new job worker: populate the job_id dropdown
 SELECT `id`, `date`, `house_id` FROM `jobs` ORDER BY 1 ASC
@@ -37,18 +32,41 @@ SELECT `id`, `date`, `house_id` FROM `jobs` ORDER BY 1 ASC
 -- add a new job worker: populate the worker_id dropdown
 SELECT `id`, `email` FROM `workers` ORDER BY 1 ASC
 
+-- add a new job: perform the total_price_calculation referenced above
+SELECT 50 * `yard_size_acres` AS total_price FROM `houses` WHERE `id` = %(house_id)s
+
+
+-------------------------------------------------
+-- SEARCH [ENTITY] SECTIONS ------------------
+-------------------------------------------------
+-- this is for the Search Customer Contacts by Name section 
+-- the syntax %()s denotes where user input will be inserted into the query
+
+SELECT * FROM `customer_contacts` 
+WHERE `first_name` LIKE %%(first_name)s% AND `last_name` LIKE %%(last_name)s%
+
+
+-------------------------------------------------
+-- ADD A NEW [ENTITY] SECTIONS ------------------
+-------------------------------------------------
+-- these are for the Add a new ENTITY sections of each page of the site
+-- the syntax %()s denotes where user input will be inserted into the query
+
+-- add a new job
+INSERT INTO `jobs` (`date`, `total_price`, `house_id`)
+VALUES (%(date)s, %(total_price_calculation)s, %(house_id)s)
+
+-- add a new job worker
+INSERT INTO `job_workers` (`job_id`, `worker_id`)
+VALUES (%(job_id)s, %(worker_id)s)
+
 -- add a new worker
 INSERT INTO `workers` (`first_name`, `last_name`, `email`, `phone_number`, `lawnmower_id`)
 VALUES (%(first_name)s, %(last_name)s, %(email)s, %(phone_number)s, %(lawnmower_id)s)
--- add a new worker: populate the lawnmower_id dropdown
-SELECT `id`, `model_name`, `make_year` FROM `lawnmowers` ORDER BY 1 ASC
 
 -- add a new house
 INSERT INTO `houses` (`street_address`, `street_address_2`, `city`, `state`, `zip_code`, `yard_size_acres`, `sales_manager_id`)
 VALUES (%(street_address)s, %(street_address_2)s, %(city)s, %(state)s, %(zip_code)s, %(yard_size_acres)s, %(sales_manager_id)s)
-
--- add a new house: populate the sales manager id dropdown
-SELECT `id`, `email` FROM `sales_managers` ORDER BY 1 ASC
 
 -- add a new lawnmower
 INSERT INTO `lawnmowers` (`brand`, `make_year`, `model_name`, `is_functional`)
@@ -62,21 +80,12 @@ VALUES (%(region)s, %(first_name)s, %(last_name)s, %(email)s, %(phone_number)s)
 INSERT INTO `customer_contacts` (`first_name`, `last_name`, `email`, `phone_number`, `house_id`)
 VALUES (%(first_name)s, %(last_name)s, %(email)s, %(phone_number)s, %(house_id)s)
 
--- add a new customer contact: populate the house id dropdown
-SELECT `id`, `street_address` FROM `houses` ORDER BY 1 ASC
 
 -------------------------------------------------
 -- UPDATE [ENTITY] SECTIONS ------------------
 -------------------------------------------------
 -- these are for the Update Record sections of each page of the site
 -- the syntax %()s denotes where user input will be inserted into the query
-
--- update a job
-UPDATE `jobs` SET 
-    `date` = %(date)s,
-    `total_price` = %(total_price)s,
-    `house_id` = %(house_id)s
-WHERE `id` = %(job_id)s
 
 -- update a job worker
 -- will need both the old values and the new values
@@ -95,6 +104,7 @@ UPDATE `lawnmowers` SET
     `is_functional` = %(is_functional)s
 WHERE `id` = %(lawnmower_id)s
 
+
 -------------------------------------------------
 -- DELETE [ENTITY] SECTIONS ------------------
 -------------------------------------------------
@@ -110,11 +120,3 @@ DELETE FROM `job_workers` WHERE `job_id` = %(job_id)s AND `worker_id` = %(worker
 -- delete a sales manager
 DELETE FROM `sales_managers` WHERE `id` = %(sales_manager_id)s
 
--------------------------------------------------
--- SEARCH [ENTITY] SECTIONS ------------------
--------------------------------------------------
--- this is for the Search Customer Contacts by Name section 
--- the syntax %()s denotes where user input will be inserted into the query
-
-SELECT * FROM `customer_contacts` 
-WHERE `first_name` LIKE %%(first_name)s% AND `last_name` LIKE %%(last_name)s%
