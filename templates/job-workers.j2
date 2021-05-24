@@ -34,6 +34,7 @@
             {% for field in fields %}
             <th scope="col">{{ field.replace("_", " ") }}</th>
             {% endfor %}
+            <th>Update</th>
         </tr>
     </thead>
     <tbody>
@@ -42,6 +43,27 @@
             {% for key in row.keys() %}
             <td>{{row[key]}}</td>
             {% endfor %}
+            
+            <td>
+            <div class="row">
+            <form method="POST" action="/update-job-worker">
+                <input type="hidden" name="old_job_id" value="{{row['job_id']}}" />
+                <input type="hidden" name="old_worker_id" value="{{row['worker_id']}}" />
+                <select required class="form-control" name="new_job_id" id="job_id">
+                {% for row in job_ids %}
+                    <option value="{{row['id']}}">{{row['id']}} ({{row['date']}}, HouseID: {{row['house_id']}})</option>
+                {% endfor %}
+                </select>
+                <select required class="form-control" name="new_worker_id" id="worker_id">
+                {% for row in worker_ids %}
+                    <option value="{{row['id']}}">{{row['id']}} ({{row['email']}})</option>
+                {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-outline-light btn-sm">Submit</button>
+            </form>
+            </div>
+            </td>
+
         </tr>
         {% endfor %}
     </tbody>

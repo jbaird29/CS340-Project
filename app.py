@@ -69,6 +69,18 @@ def update_houses_sales_manager():
     else:
         return redirect("/500")
 
+@app.route('/update-job-worker', methods=['POST'])
+def update_job_worker():
+    old_job_id = request.form.get('old_job_id')
+    old_worker_id = request.form.get('old_worker_id')
+    new_worker_id = request.form.get('new_worker_id')
+    new_job_id = request.form.get('new_job_id')
+    valid = database.update_job_worker(old_job_id, old_worker_id, new_worker_id, new_job_id)
+    if valid:
+        return redirect('/job-workers')
+    else:
+        return redirect("/500")
+
 @app.route('/customer-contacts',methods=['GET'])
 def customer_contacts():
     # first and last name query params are used for the "Search" functionality

@@ -58,7 +58,9 @@ class LennysDB:
                 "lawnmower_status": """UPDATE `lawnmowers` SET `is_functional` = %(is_functional)s 
                     WHERE `id` = %(lawnmower_id)s""",
                 "houses_sales_manager": """UPDATE `houses` SET `sales_manager_id` = %(sales_manager_id)s
-                    WHERE `id` = %(house_id)s"""
+                    WHERE `id` = %(house_id)s""",
+                "job_worker": """UPDATE `job_workers` SET  `job_id` = %(new_job_id)s, `worker_id` = %(new_worker_id)s
+                    WHERE `job_id` = %(old_job_id)s AND `worker_id` = %(old_worker_id)s"""
             }
         }
 
@@ -215,6 +217,24 @@ class LennysDB:
             return True
         except Exception as e:
             print(e)
-            logger.exception("Error running UPDATE lawnmower status")
+            logger.exception("Error running UPDATE house's sales manager")
             return False
+
+    def update_job_worker(self, old_job_id, old_worker_id, new_worker_id, new_job_id):
+        """Updates a job worker table entry"""
+        query = self.sql["update"]["job_worker"]
+        args = {
+            "old_job_id": old_job_id,
+            "old_worker_id": old_worker_id,
+            "new_worker_id": new_worker_id,
+            "new_job_id": new_job_id
+        }
+        try:
+            self._execute_query(query, args)
+            return True
+        except Exception as e:
+            print(e)
+            logger.exception("Error running UPDATE job worker")
+            return False
+
 
