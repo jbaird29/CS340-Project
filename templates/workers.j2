@@ -6,19 +6,19 @@
     <form method="POST" action="/insert">
         <div class="row">
             <div class="col">
-                <label for="first_name">First Name</label>
+                <label for="first_name">First Name*</label>
                 <input required type="text" class="form-control" name="first_name" id="first_name" />
             </div>
             <div class="col">
-                <label for="last_name">Last Name</label>
+                <label for="last_name">Last Name*</label>
                 <input required type="text" class="form-control" name="last_name" id="last_name" />
             </div>
             <div class="col">
-                <label for="date">Email</label>
+                <label for="date">Email*</label>
                 <input required type="email" class="form-control" name="email" id="email" />
             </div>
             <div class="col">
-                <label for="phone_number">Phone Number</label>
+                <label for="phone_number">Phone Number*</label>
                 <input
                     required
                     type="tel"
@@ -30,7 +30,7 @@
                 />
             </div>
             <div class="col">
-                <label for="lawnmower_id">Lawnmower ID</label>
+                <label for="lawnmower_id">Lawnmower ID*</label>
                 <select class="form-control" name="lawnmower_id" id="lawnmower_id">
                 {% for row in lawnmower_ids %}
                     <option value="{{row['id']}}">{{row['id']}} ({{row['model_name']}}, {{row['make_year']}})</option>
@@ -39,5 +39,6 @@
             </div>
         </div>
         <button name="table_name" value="workers" type="submit" class="btn btn-outline-light mt-2">Submit</button>
+        <span>* indicates a required field</span>
     </form>
 {% endblock %}

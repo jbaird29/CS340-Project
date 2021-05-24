@@ -6,19 +6,19 @@
     <form method="POST" action="/insert">
         <div class="row">
             <div class="col">
-                <label for="brand">Brand</label>
+                <label for="brand">Brand*</label>
                 <input required type="text" class="form-control" name="brand" id="brand" />
             </div>
             <div class="col">
-                <label for="make_year">Make Year</label>
+                <label for="make_year">Make Year*</label>
                 <input required type="number" placeholder="Format: 2019" class="form-control" name="make_year" id="make_year" />
             </div>
             <div class="col">
-                <label for="model_name">Model Name</label>
+                <label for="model_name">Model Name*</label>
                 <input required type="text" class="form-control" name="model_name" id="model_name" />
             </div>
             <div class="col">
-                <label for="is_functional">Is Functional?</label>
+                <label for="is_functional">Is Functional?*</label>
                 <select required class="form-control" name="is_functional" id="is_functional">
                     <option value="1">Yes</option>
                     <option value="0">No</option>
@@ -26,5 +26,6 @@
             </div>
         </div>
         <button name="table_name" value="lawnmowers" type="submit" class="btn btn-outline-light mt-2">Submit</button>
+        <span>* indicates a required field</span>
     </form>
 {% endblock %}

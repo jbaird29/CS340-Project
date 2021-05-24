@@ -6,7 +6,7 @@
     <form method="POST" action="/insert">
         <div class="row">
             <div class="col">
-                <label for="date">Job Date</label>
+                <label for="date">Job Date*</label>
                 <input required type="date" class="form-control" name="date" id="date" />
             </div>
             {# this is calculated by multiplying $50 * the house's acres #}
@@ -15,7 +15,7 @@
                 <input required type="number" step="0.1" placeholder="Format: 50.50" class="form-control" name="total_price" id="total_price" />
             </div> #}
             <div class="col">
-                <label for="house_id">House ID</label>
+                <label for="house_id">House ID*</label>
                 <select class="form-control" name="house_id" id="house_id">
                 {% for row in house_ids %}
                     <option value="{{row['id']}}">{{row['id']}} ({{row['street_address']}})</option>
@@ -24,5 +24,6 @@
             </div>
         </div>
         <button name="table_name" value="jobs" type="submit" class="btn btn-outline-light mt-2">Submit</button>
+        <span>* indicates a required field</span>
     </form>
 {% endblock %}
