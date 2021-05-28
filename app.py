@@ -1,4 +1,5 @@
 from flask import Flask, render_template, redirect, request, json
+from flask_mysqldb import MySQL
 import os
 from database.database import LennysDB
 from dotenv import load_dotenv, find_dotenv
@@ -8,13 +9,16 @@ from dotenv import load_dotenv, find_dotenv
 app = Flask(__name__)
 load_dotenv(find_dotenv())
 
-# Set the variables in the application
-host = os.environ.get("340DBHOST")
-user = os.environ.get("340DBUSER")
-passwd = os.environ.get("340DBPW")
-db = os.environ.get("340DB")
+# Configure the db connection
+app.config['MYSQL_HOST'] = os.environ.get("340DBHOST")
+app.config['MYSQL_USER'] = os.environ.get("340DBUSER")
+app.config['MYSQL_PASSWORD'] = os.environ.get("340DBPW")
+app.config['MYSQL_DB'] = os.environ.get("340DB")
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+mysql = MySQL(app)
+
 # instantiate a Database for ease of running queries
-database = LennysDB(host, user, passwd, db)
+database = LennysDB(mysql)
 
 # Routes 
 @app.route('/',methods=['GET'])

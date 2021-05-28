@@ -1,19 +1,14 @@
 from typing import Dict, List
-import MySQLdb
 import logging
 
-MySQLdb.paramstyle = "named"
 logger = logging.getLogger()
 
 class LennysDB:
     """
     Represents the database connection and it schema, with methods to perform CRUD queries
     """
-    def __init__(self, host, user, passwd, db) -> None:
-        self.host = host
-        self.user = user
-        self.passwd = passwd
-        self.db = db
+    def __init__(self, mysql) -> None:
+        self.mysql = mysql
         self.schema = {
             "customer_contacts": ["id", "first_name", "last_name", "email", "phone_number", "house_id"],
             "houses": ["id", "street_address", "street_address_2", "city", "state", "zip_code", "yard_size_acres", "sales_manager_id"],
@@ -71,13 +66,11 @@ class LennysDB:
         Given a templated query and its arguments, executes the query and returns its results
         Convenience method for ease of opening / closing connections
         """
-        conn = MySQLdb.connect(self.host, self.user, self.passwd, self.db)
-        cursor = conn.cursor(MySQLdb.cursors.DictCursor)
+        cursor = self.mysql.connection.cursor()
         cursor.execute(query, args)
-        conn.commit()
+        self.mysql.connection.commit()
         results = cursor.fetchall()
         cursor.close()
-        conn.close()
         return results
 
     def get_table_fields(self, sql_table_name) -> List:
