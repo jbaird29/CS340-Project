@@ -129,13 +129,21 @@ def houses():
     sales_manager_ids = database.select_sales_manager_ids()  # populates dropdown
     return render_template("houses.j2", name="Houses", fields=fields, table_data=table_data, sales_manager_ids=sales_manager_ids)
 
-@app.route('/job-workers',methods=['GET'])
+@app.route('/job-workers',methods=['GET', 'POST'])
 def job_workers():
-    table_data = database.select_all('job_workers')
-    fields = database.get_table_fields('job_workers')
-    job_ids = database.select_job_ids()  # populates dropdown
-    worker_ids = database.select_worker_ids()  # populates dropdown
-    return render_template("job-workers.j2", name="Job Workers", fields=fields, table_data=table_data, job_ids=job_ids, worker_ids=worker_ids)
+    table = 'job_workers'
+    name = "Job Workers"
+    if request.method == 'POST':
+        valid, res_msg = database.insert_into(table, request.form.copy())
+        rsp_category = 'success' if valid else 'error'
+        flash(res_msg, rsp_category)
+        return redirect(request.url)
+    if request.method == 'GET':
+        table_data = database.select_all(table)
+        fields = database.get_table_fields(table)
+        job_ids = database.select_job_ids()  # populates dropdown
+        worker_ids = database.select_worker_ids()  # populates dropdown
+        return render_template("job-workers.j2", name=name, fields=fields, table_data=table_data, job_ids=job_ids, worker_ids=worker_ids)
 
 @app.route('/jobs',methods=['GET', 'POST'])
 def jobs():
