@@ -37,7 +37,7 @@
                 </select>
             </div>
         </div>
-        <button name="table_name" value="sales_managers" type="submit" class="btn btn-outline-light mt-2">Submit</button>
+        <button name="type" value="insert" type="submit" class="btn btn-outline-light mt-2">Submit</button>
         <span>* indicates a required field</span>
     </form>
 {% endblock %}
@@ -58,9 +58,12 @@
             {% for key in row.keys() %}
             <td>{{row[key]}}</td>
             {% endfor %}
-            <form method="POST" action="/delete-sales-manager"><td>
-            <button name="id" value="{{row['id']}}" type="submit" class="btn btn-outline-light btn-sm">Delete</button>
-            </td></form>
+            <form method="POST">
+                <td>
+                <input type="hidden" name="type" value="delete" />
+                <button name="id" value="{{row['id']}}" type="submit" class="btn btn-outline-light btn-sm">Delete</button>
+                </td>
+            </form>
         </tr>
         {% endfor %}
     </tbody>

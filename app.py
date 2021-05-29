@@ -32,15 +32,6 @@ def root():
 def server_err():
     return render_template("500-error.j2") 
 
-@app.route('/delete-sales-manager',methods=['POST'])
-def delete_sales_manager():
-    sales_manager_id = request.form.get('id')
-    valid = database.delete_sales_manager(sales_manager_id)
-    if valid:
-        return redirect('/sales-managers')
-    else:
-        return redirect("/500")
-
 @app.route('/update-lawnmower-status', methods=['POST'])
 def update_lawnmower_status():
     lawnmower_id = request.form.get('id')
@@ -180,10 +171,21 @@ def sales_managers():
     table = 'sales_managers'
     name = "Sales Managers"
     if request.method == 'POST':
-        valid, res_msg = database.insert_into(table, request.form.copy())
-        rsp_category = 'success' if valid else 'error'
-        flash(res_msg, rsp_category)
-        return redirect(request.url)
+        form_data = request.form.copy()
+        form_type = form_data.get('type')
+        if form_type == 'delete':
+            sales_manager_id = request.form.get('id')
+            valid, res_msg = database.delete_sales_manager(sales_manager_id)
+            rsp_category = 'success' if valid else 'error'
+            flash(res_msg, rsp_category)
+            return redirect(request.url)
+        elif form_type == 'insert':
+            valid, res_msg = database.insert_into(table, request.form.copy())
+            rsp_category = 'success' if valid else 'error'
+            flash(res_msg, rsp_category)
+            return redirect(request.url)
+        else:
+            return redirect(request.url)
     if request.method == 'GET':
         table_data = database.select_all(table)
         fields = database.get_table_fields(table)

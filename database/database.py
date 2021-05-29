@@ -179,11 +179,11 @@ class LennysDB:
         }
         try:
             self._execute_query(query, args)
-            return True
+            return True, "Successfully deleted that entry"
         except Exception as e:
             print(e)
             logger.exception("Error running DELETE sales manager")
-            return False
+            return False, str(e)
 
     def update_lawnmower_status(self, lawnmower_id: int, is_functional: int):
         """Updates whether a lawnmower is functional or not"""
