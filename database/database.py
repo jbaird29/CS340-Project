@@ -256,10 +256,10 @@ class LennysDB:
         }
         try:
             self._execute_query(query, args)
-            return True
+            return True, "Successfully deleted that entry."
         except Exception as e:
             print(e)
             logger.exception("Error running DELETE job worker")
-            return False
+            return False, str(e)
 
 

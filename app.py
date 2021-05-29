@@ -131,9 +131,17 @@ def jobs():
     table = 'jobs'
     name = "Jobs"
     if request.method == 'POST':
-        valid, res_msg = database.insert_into(table, request.form.copy())
-        rsp_category = 'success' if valid else 'error'
-        flash(res_msg, rsp_category)
+        form_data = request.form.copy()
+        form_type = form_data.get('type')
+        if form_type == 'delete':
+            job_id = form_data.get('id')
+            valid, res_msg = database.delete_job(job_id)
+            rsp_category = 'success' if valid else 'error'
+            flash(res_msg, rsp_category)
+        elif form_type == 'insert':
+            valid, res_msg = database.insert_into(table, form_data)
+            rsp_category = 'success' if valid else 'error'
+            flash(res_msg, rsp_category)
         return redirect(request.url)
     if request.method == 'GET':
         table_data = database.select_all(table)
