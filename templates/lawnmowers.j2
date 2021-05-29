@@ -23,7 +23,7 @@
                 </select>
             </div>
         </div>
-        <button name="table_name" value="lawnmowers" type="submit" class="btn btn-outline-light mt-2">Submit</button>
+        <button name="type" value="insert" type="submit" class="btn btn-outline-light mt-2">Submit</button>
         <span>* indicates a required field</span>
     </form>
 {% endblock %}
@@ -45,7 +45,8 @@
             <td>{{row[key]}}</td>
             {% endfor %}
             <td>
-            <form method="POST" action="/update-lawnmower-status">
+            <form method="POST">
+                <input type="hidden" name="type" value="update" />
                 <input type="hidden" name="id" value="{{row['id']}}" />
                 <button name="is_functional" value="1" type="submit" class="btn btn-outline-light btn-sm">Functional</button>
                 <button name="is_functional" value="0" type="submit" class="btn btn-outline-light btn-sm">Disabled</button>

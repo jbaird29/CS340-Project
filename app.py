@@ -32,16 +32,6 @@ def root():
 def server_err():
     return render_template("500-error.j2") 
 
-@app.route('/update-lawnmower-status', methods=['POST'])
-def update_lawnmower_status():
-    lawnmower_id = request.form.get('id')
-    is_functional = request.form.get('is_functional')
-    valid = database.update_lawnmower_status(lawnmower_id, is_functional)
-    if valid:
-        return redirect('/lawnmowers')
-    else:
-        return redirect("/500")
-
 @app.route('/update-houses-sales-manager', methods=['POST'])
 def update_houses_sales_manager():
     house_id = request.form.get('id')
@@ -157,9 +147,18 @@ def lawnmowers():
     table = 'lawnmowers'
     name = "Lawnmowers"
     if request.method == 'POST':
-        valid, res_msg = database.insert_into(table, request.form.copy())
-        rsp_category = 'success' if valid else 'error'
-        flash(res_msg, rsp_category)
+        form_data = request.form.copy()
+        form_type = form_data.get('type')
+        if form_type == 'update':
+            lawnmower_id = form_data.get('id')
+            is_functional = form_data.get('is_functional')
+            valid, res_msg = database.update_lawnmower_status(lawnmower_id, is_functional)
+            rsp_category = 'success' if valid else 'error'
+            flash(res_msg, rsp_category)
+        elif form_type == 'insert':
+            valid, res_msg = database.insert_into(table, form_data)
+            rsp_category = 'success' if valid else 'error'
+            flash(res_msg, rsp_category)
         return redirect(request.url)
     if request.method == 'GET':
         table_data = database.select_all_lawnmowers()
@@ -178,14 +177,11 @@ def sales_managers():
             valid, res_msg = database.delete_sales_manager(sales_manager_id)
             rsp_category = 'success' if valid else 'error'
             flash(res_msg, rsp_category)
-            return redirect(request.url)
         elif form_type == 'insert':
-            valid, res_msg = database.insert_into(table, request.form.copy())
+            valid, res_msg = database.insert_into(table, form_data)
             rsp_category = 'success' if valid else 'error'
             flash(res_msg, rsp_category)
-            return redirect(request.url)
-        else:
-            return redirect(request.url)
+        return redirect(request.url)
     if request.method == 'GET':
         table_data = database.select_all(table)
         fields = database.get_table_fields(table)
