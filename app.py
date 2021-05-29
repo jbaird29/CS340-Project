@@ -101,9 +101,18 @@ def houses():
     table = 'houses'
     name = "Houses"
     if request.method == 'POST':
-        valid, res_msg = database.insert_into(table, request.form.copy())
-        rsp_category = 'success' if valid else 'error'
-        flash(res_msg, rsp_category)
+        form_data = request.form.copy()
+        form_type = form_data.get('type')
+        if form_type == 'update':
+            house_id = form_data.get('id')
+            sales_manager_id = form_data.get('sales_manager_id')
+            valid, res_msg = database.update_houses_sales_manager(house_id, sales_manager_id)
+            rsp_category = 'success' if valid else 'error'
+            flash(res_msg, rsp_category)
+        elif form_type == 'insert':
+            valid, res_msg = database.insert_into(table, form_data)
+            rsp_category = 'success' if valid else 'error'
+            flash(res_msg, rsp_category)
         return redirect(request.url)
     if request.method == 'GET':
         table_data = database.select_all(table)

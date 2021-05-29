@@ -210,11 +210,11 @@ class LennysDB:
         }
         try:
             self._execute_query(query, args)
-            return True
+            return True, "Successfully updated that entry"
         except Exception as e:
             print(e)
             logger.exception("Error running UPDATE house's sales manager")
-            return False
+            return False, str(e)
 
     def update_job_worker(self, old_job_id, old_worker_id, new_worker_id, new_job_id):
         """Updates a job worker table entry"""
