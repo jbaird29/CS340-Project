@@ -1,19 +1,5 @@
 {% extends "base.j2" %}
 {% block main %}
-    <h1 class="mt-4 text-center">Workers Table</h1>
-
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            {% for category, message in messages %}
-                {% if category == 'error' %}
-                    <div class="alert alert-danger" role="alert">ERROR: {{message}}</div>
-                {% else %}
-                    <div class="alert alert-primary" role="alert">{{message}}</div>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-
     <h3 class="mt-4">Add a New Worker</h3>
     <form method="POST">
         <div class="row">
