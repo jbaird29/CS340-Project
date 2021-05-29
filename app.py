@@ -32,16 +32,6 @@ def root():
 def server_err():
     return render_template("500-error.j2") 
 
-@app.route('/update-houses-sales-manager', methods=['POST'])
-def update_houses_sales_manager():
-    house_id = request.form.get('id')
-    sales_manager_id = request.form.get('sales_manager_id')
-    valid = database.update_houses_sales_manager(house_id, sales_manager_id)
-    if valid:
-        return redirect('/houses')
-    else:
-        return redirect("/500")
-
 @app.route('/update-job-worker', methods=['POST'])
 def update_job_worker():
     old_job_id = request.form.get('old_job_id')
