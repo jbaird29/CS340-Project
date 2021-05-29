@@ -162,6 +162,7 @@ class LennysDB:
         # if insertion is for a house, coalesce the empty string to null valid if necessary
         if sql_table_name == "houses":
             args["sales_manager_id"] = None if args["sales_manager_id"] == "" else args["sales_manager_id"]
+            args["street_address_2"] = None if args["street_address_2"] == "" else args["sales_manager_id"]
         try:
             self._execute_query(query, args)
             return True, "Successfully inserted that entry."
