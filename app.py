@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, json
+from flask import Flask, render_template, redirect, request, flash, json
 from flask_mysqldb import MySQL
 import os
 from database.database import LennysDB
@@ -16,6 +16,9 @@ app.config['MYSQL_PASSWORD'] = os.environ.get("340DBPW")
 app.config['MYSQL_DB'] = os.environ.get("340DB")
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
+
+# configure secret for sessions
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 
 # instantiate a Database for ease of running queries
 database = LennysDB(mysql)
@@ -153,13 +156,20 @@ def sales_managers():
     fields = database.get_table_fields('sales_managers')
     return render_template("sales-managers.j2", name="Sales Managers", fields=fields, table_data=table_data)
 
-@app.route('/workers',methods=['GET'])
+@app.route('/workers',methods=['GET', 'POST'])
 def workers():
-    table_data = database.select_all('workers')
-    fields = database.get_table_fields('workers')
-    lawnmower_ids = database.select_lawnmower_ids()  # populates dropdown
-    return render_template("workers.j2", name="Workers", fields=fields, table_data=table_data, lawnmower_ids=lawnmower_ids)
-
+    table = 'workers'
+    name = "Workers"
+    if request.method == 'POST':  # inserting a new entry
+        valid, res_msg = database.insert_into(table, request.form)
+        rsp_category = 'success' if valid else 'error'
+        flash(res_msg, rsp_category)
+        return redirect(request.url)
+    if request.method == 'GET':  # render the page
+        table_data = database.select_all(table)
+        fields = database.get_table_fields(table)
+        lawnmower_ids = database.select_lawnmower_ids()  # populates dropdown
+        return render_template("workers.j2", name=name, fields=fields, table_data=table_data, lawnmower_ids=lawnmower_ids)
 
 # Listener
 if __name__ == "__main__":

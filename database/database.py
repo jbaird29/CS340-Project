@@ -159,16 +159,16 @@ class LennysDB:
         if sql_table_name == "jobs":
             house_id = args["house_id"]
             args["total_price"] = self.get_jobs_total_price(house_id)
+        # if insertion is for a house, coalesce the empty string to null valid if necessary
         if sql_table_name == "houses":
             args["sales_manager_id"] = None if args["sales_manager_id"] == "" else args["sales_manager_id"]
-            print('New args', args)
         try:
             self._execute_query(query, args)
-            return True
+            return True, "Successfully inserted that entry."
         except Exception as e:
-            print(e)
             logger.exception("Error running INSERT operation")
-            return False
+            print(e)
+            return False, str(e)
     
     def delete_sales_manager(self, sales_manager_id: int):
         """Given a sales_manager_id, deletes that record"""
