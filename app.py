@@ -137,12 +137,20 @@ def job_workers():
     worker_ids = database.select_worker_ids()  # populates dropdown
     return render_template("job-workers.j2", name="Job Workers", fields=fields, table_data=table_data, job_ids=job_ids, worker_ids=worker_ids)
 
-@app.route('/jobs',methods=['GET'])
+@app.route('/jobs',methods=['GET', 'POST'])
 def jobs():
-    table_data = database.select_all('jobs')
-    fields = database.get_table_fields('jobs')
-    house_ids = database.select_house_ids()  # populates dropdown
-    return render_template("jobs.j2", name="Jobs", fields=fields, table_data=table_data, house_ids=house_ids)
+    table = 'jobs'
+    name = "Jobs"
+    if request.method == 'POST':
+        valid, res_msg = database.insert_into(table, request.form.copy())
+        rsp_category = 'success' if valid else 'error'
+        flash(res_msg, rsp_category)
+        return redirect(request.url)
+    if request.method == 'GET':
+        table_data = database.select_all(table)
+        fields = database.get_table_fields(table)
+        house_ids = database.select_house_ids()  # populates dropdown
+        return render_template("jobs.j2", name=name, fields=fields, table_data=table_data, house_ids=house_ids)
 
 @app.route('/lawnmowers',methods=['GET'])
 def lawnmowers():
@@ -161,7 +169,7 @@ def workers():
     table = 'workers'
     name = "Workers"
     if request.method == 'POST':  # inserting a new entry
-        valid, res_msg = database.insert_into(table, request.form)
+        valid, res_msg = database.insert_into(table, request.form.copy())
         rsp_category = 'success' if valid else 'error'
         flash(res_msg, rsp_category)
         return redirect(request.url)
