@@ -227,11 +227,11 @@ class LennysDB:
         }
         try:
             self._execute_query(query, args)
-            return True
+            return True, "Successfully updated that entry"
         except Exception as e:
             print(e)
             logger.exception("Error running UPDATE job worker")
-            return False
+            return False, str(e)
 
     def delete_job_worker(self, job_id, worker_id):
         """Delete a job worker table entry"""
@@ -242,11 +242,11 @@ class LennysDB:
         }
         try:
             self._execute_query(query, args)
-            return True
+            return True, "Successfully deleted that entry"
         except Exception as e:
             print(e)
             logger.exception("Error running DELETE job worker")
-            return False
+            return False, str(e)
 
     def delete_job(self, job_id):
         """Delete a job worker table entry"""
@@ -256,7 +256,7 @@ class LennysDB:
         }
         try:
             self._execute_query(query, args)
-            return True, "Successfully deleted that entry."
+            return True, "Successfully deleted that entry"
         except Exception as e:
             print(e)
             logger.exception("Error running DELETE job worker")

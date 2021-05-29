@@ -32,38 +32,6 @@ def root():
 def server_err():
     return render_template("500-error.j2") 
 
-@app.route('/update-job-worker', methods=['POST'])
-def update_job_worker():
-    old_job_id = request.form.get('old_job_id')
-    old_worker_id = request.form.get('old_worker_id')
-    new_worker_id = request.form.get('new_worker_id')
-    new_job_id = request.form.get('new_job_id')
-    valid = database.update_job_worker(old_job_id, old_worker_id, new_worker_id, new_job_id)
-    if valid:
-        return redirect('/job-workers')
-    else:
-        return redirect("/500")
-
-@app.route('/delete-job-worker', methods=['POST'])
-def delete_job_woker():
-    job_id = request.form.get('job_id')
-    worker_id = request.form.get('worker_id')
-    valid = database.delete_job_worker(job_id, worker_id)
-    if valid:
-        return redirect('/job-workers')
-    else:
-        return redirect("/500")
-
-@app.route('/delete-job', methods=['POST'])
-def delete_job():
-    job_id = request.form.get('id')
-    valid = database.delete_job(job_id)
-    if valid:
-        return redirect('/jobs')
-    else:
-        return redirect("/500")
-
-
 @app.route('/customer-contacts',methods=['GET', 'POST'])
 def customer_contacts():
     table = 'customer_contacts'
@@ -115,9 +83,26 @@ def job_workers():
     table = 'job_workers'
     name = "Job Workers"
     if request.method == 'POST':
-        valid, res_msg = database.insert_into(table, request.form.copy())
-        rsp_category = 'success' if valid else 'error'
-        flash(res_msg, rsp_category)
+        form_data = request.form.copy()
+        form_type = form_data.get('type')
+        if form_type == 'delete':
+            job_id = request.form.get('job_id')
+            worker_id = request.form.get('worker_id')
+            valid, res_msg = database.delete_job_worker(job_id, worker_id)
+            rsp_category = 'success' if valid else 'error'
+            flash(res_msg, rsp_category)
+        elif form_type == 'update':
+            old_job_id = request.form.get('old_job_id')
+            old_worker_id = request.form.get('old_worker_id')
+            new_worker_id = request.form.get('new_worker_id')
+            new_job_id = request.form.get('new_job_id')
+            valid, res_msg = database.update_job_worker(old_job_id, old_worker_id, new_worker_id, new_job_id)
+            rsp_category = 'success' if valid else 'error'
+            flash(res_msg, rsp_category)
+        elif form_type == 'insert':
+            valid, res_msg = database.insert_into(table, form_data)
+            rsp_category = 'success' if valid else 'error'
+            flash(res_msg, rsp_category)
         return redirect(request.url)
     if request.method == 'GET':
         table_data = database.select_all(table)
