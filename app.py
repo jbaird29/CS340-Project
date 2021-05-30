@@ -105,7 +105,7 @@ def job_workers():
             flash(res_msg, rsp_category)
         return redirect(request.url)
     if request.method == 'GET':
-        table_data = database.select_all(table)
+        table_data = database.select_all_job_workers()
         fields = database.get_table_fields(table)
         job_ids = database.select_job_ids()  # populates dropdown
         worker_ids = database.select_worker_ids()  # populates dropdown
@@ -129,7 +129,7 @@ def jobs():
             flash(res_msg, rsp_category)
         return redirect(request.url)
     if request.method == 'GET':
-        table_data = database.select_all(table)
+        table_data = database.select_all_jobs()
         fields = database.get_table_fields(table)
         house_ids = database.select_house_ids()  # populates dropdown
         return render_template("jobs.j2", name=name, fields=fields, table_data=table_data, house_ids=house_ids)

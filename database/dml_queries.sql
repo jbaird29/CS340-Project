@@ -2,8 +2,12 @@
 -- BROWSE [TABLE] SECTIONS ------------------
 -------------------------------------------------
 -- these are for the Browse TABLE sections of each page of the site
-SELECT * FROM `job`
-SELECT * FROM `job_workers`
+SELECT j.id, j.date, j.total_price, j.house_id, h.street_address, GROUP_CONCAT(jw.worker_id SEPARATOR ', ') AS worker_ids 
+    FROM jobs j LEFT JOIN job_workers jw ON j.id = jw.job_id LEFT JOIN houses h ON h.id = j.house_id GROUP BY j.id
+SELECT jw.job_id AS job_id, j.date AS job_date, j.house_id AS job_house_id, 
+    h.street_address AS job_house_address, jw.worker_id, w.email AS worker_email 
+    FROM job_workers jw LEFT JOIN jobs j ON jw.job_id = j.id LEFT JOIN workers w ON jw.worker_id = w.id 
+    LEFT JOIN houses h ON h.id = j.house_id
 SELECT * FROM `workers`
 SELECT * FROM `houses`
 SELECT * FROM `lawnmowers`

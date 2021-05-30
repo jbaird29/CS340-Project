@@ -3,7 +3,7 @@ import logging
 
 logger = logging.getLogger()
 
-# SELECT id, date, total_price, house_id, GROUP_CONCAT(worker_id) FROM jobs LEFT JOIN job_workers ON jobs.id = job_workers.job_id GROUP BY jobs.id;
+# SELECT id, date, total_price, house_id, GROUP_CONCAT(worker_id) AS worker_ids FROM jobs LEFT JOIN job_workers ON jobs.id = job_workers.job_id GROUP BY jobs.id;
 
 class LennysDB:
     """
@@ -23,14 +23,21 @@ class LennysDB:
         self.browse_fields = {
             "customer_contacts": ["ID", "First Name", "Last Name", "Email", "Phone Number", "House ID"],
             "houses": ["ID", "Street Address", "Street Address 2", "City", "State", "ZIP", "Yard Size (acres)", "Sales Manager ID"],
-            "jobs": ["ID", "Date", "Total Price", "House ID"],
-            "job_workers": ["Job ID", "Worker ID"],
+            "jobs": ["ID", "Date", "Total Price", "House ID", "House Address", "Worker IDs"],
+            "job_workers": ["Job ID", "Job Date", "Job House ID", "Job House Address", "Worker ID", "Worker Email"],
             "lawnmowers": ["ID", "Brand", "Make Year", "Model Name", "Is Functional?"],
             "sales_managers": ["ID", "Region", "First Name", "Last Name", "Email", "Phone Number"],
             "workers": ["ID", "First Name", "Last Name", "Email", "Phone Number", "Lawnmower ID"],
         }
         self.sql = {
             "select": {
+                "browse_jobs": """SELECT j.id, j.date, j.total_price, j.house_id, h.street_address, 
+                    GROUP_CONCAT(jw.worker_id SEPARATOR ', ') AS worker_ids FROM jobs j 
+                    LEFT JOIN job_workers jw ON j.id = jw.job_id LEFT JOIN houses h ON h.id = j.house_id GROUP BY j.id""",
+                "browse_job_workers": """SELECT jw.job_id AS job_id, j.date AS job_date, j.house_id AS job_house_id, 
+                    h.street_address AS job_house_address, jw.worker_id, w.email AS worker_email 
+                    FROM job_workers jw LEFT JOIN jobs j ON jw.job_id = j.id LEFT JOIN workers w ON jw.worker_id = w.id 
+                    LEFT JOIN houses h ON h.id = j.house_id""",
                 "search_contacts": """SELECT * FROM `customer_contacts` 
                     WHERE `first_name` LIKE %(first_name)s AND `last_name` LIKE %(last_name)s""",
                 "get_jobs_total_price": """SELECT 50 * `yard_size_acres` AS total_price FROM `houses` 
@@ -84,14 +91,25 @@ class LennysDB:
         cursor.close()
         return results
 
-    def get_table_fields(self, sql_table_name) -> List:
+    def get_table_fields(self, sql_table_name) -> list:
         """Given a table name, returns a list of all the fields in that table"""
         return self.browse_fields[sql_table_name]
     
-    def select_all(self, sql_table_name) -> dict:
+    def select_all(self, sql_table_name) -> list:
         """Given a table name, runs a SELECT * query and returns the results"""
         query = f"""SELECT * FROM {sql_table_name}"""
         results = self._execute_query(query) 
+        return results
+
+    def select_all_jobs(self) -> list:
+        """Selects all fields for the Jobs table"""
+        query = self.sql["select"]["browse_jobs"]
+        results = self._execute_query(query)
+        return results
+
+    def select_all_job_workers(self) -> list:
+        query = self.sql["select"]["browse_job_workers"]
+        results = self._execute_query(query)
         return results
 
     def select_all_lawnmowers(self) -> dict:
@@ -101,7 +119,7 @@ class LennysDB:
         results = self._execute_query(query) 
         return results
 
-    def search_contacts(self, first_name="", last_name="") -> dict:
+    def search_contacts(self, first_name="", last_name="") -> list:
         """
         Given a first/last name, runs a SELECT * query with WHERE filter against
         the customer contacts table and returns the results
@@ -155,10 +173,10 @@ class LennysDB:
         results = self._execute_query(query)
         return results
 
-    def insert_into(self, sql_table_name: str, data: dict) -> bool:
+    def insert_into(self, sql_table_name: str, data: dict):
         """
         Given a table name and a dict of field_name:value pairs, inserts the data into table
-        Returns True if executed successfully, otherwise returns False
+        Returns tuple of: (True or False depending on result, status message)
         """
         query = self.sql["insert"].get(sql_table_name)
         args = data
