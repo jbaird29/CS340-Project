@@ -56,24 +56,24 @@ def customer_contacts():
 @app.route('/houses',methods=['GET', 'POST'])
 def houses():
     table = 'houses'
-    name = "Houses"
     if request.method == 'POST':
         form_data = request.form.copy()
         form_type = form_data.get('type')
         if form_type == 'update':
             house_id = form_data.get('id')
             sales_manager_id = form_data.get('sales_manager_id')
-            valid, res_msg = database.update_houses_sales_manager(house_id, sales_manager_id)
+            valid, res_msg = database.houses.update_sales_manager(house_id, sales_manager_id)
             rsp_category = 'success' if valid else 'error'
             flash(res_msg, rsp_category)
         elif form_type == 'insert':
-            valid, res_msg = database.insert_into(table, form_data)
+            valid, res_msg = database.houses.insert_into(form_data)
             rsp_category = 'success' if valid else 'error'
             flash(res_msg, rsp_category)
         return redirect(request.url)
     if request.method == 'GET':
-        table_data = database.select_all_houses()
-        fields = database.get_table_fields(table)
+        name = database.houses.get_title()
+        table_data = database.houses.select_all()
+        fields = database.houses.get_field_titles()
         sales_manager_ids = database.select_sales_manager_ids()  # populates dropdown
         return render_template("houses.j2", name=name, fields=fields, table_data=table_data, sales_manager_ids=sales_manager_ids)
 

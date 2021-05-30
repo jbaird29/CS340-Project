@@ -53,8 +53,6 @@ class BaseTable:
 
 
 class CustomerContacts(BaseTable):
-    """Customer Contacts table"""
-
     def __init__(self, mysql) -> None:
         title = "Customer Contacts"
         fields = ["id", "first_name", "last_name", "email", "phone_number", "house_id"]
@@ -77,6 +75,43 @@ class CustomerContacts(BaseTable):
         print(query)
         return super()._execute_query(query, args) 
 
+class Houses(BaseTable):
+    def __init__(self, mysql) -> None:
+        title = "Houses"
+        fields = ["id", "street_address", "street_address_2", "city", "state", "zip_code", "yard_size_acres", "sales_manager_id"]
+        field_titles = ["ID", "Street Address", "Street Address 2", "City", "State", "ZIP", "Yard Size (acres)", "Sales Manager ID", "Sales Manager Email"]
+        sql_browse =  """SELECT h.id, h.street_address, h.street_address_2, h.city, h.state, h.zip_code, 
+            h.yard_size_acres, h.sales_manager_id, s.email AS sales_manager_email FROM houses h LEFT JOIN sales_managers s ON h.sales_manager_id = s.id"""
+        sql_insert = """INSERT INTO `houses` (`street_address`, `street_address_2`, `city`, `state`, `zip_code`, `yard_size_acres`, `sales_manager_id`)
+            VALUES (%(street_address)s, %(street_address_2)s, %(city)s, %(state)s, %(zip_code)s, %(yard_size_acres)s, %(sales_manager_id)s)"""
+        super().__init__(mysql, title, fields, field_titles, sql_browse, sql_insert)
+        self._sql_update = """UPDATE `houses` SET `sales_manager_id` = %(sales_manager_id)s WHERE `id` = %(house_id)s"""
+
+    def insert_into(self, data: dict):
+        """Given a table name and a dict of field_name:value pairs, inserts the data into table
+        Returns tuple of: (True or False depending on result, status message)"""
+        args = data
+        print(args)
+        args["sales_manager_id"] = None if args["sales_manager_id"] == "" else args["sales_manager_id"]  # change from '' to null
+        args["street_address_2"] = None if args["street_address_2"] == "" else args["street_address_2"]  # change from '' to null
+        return super().insert_into(args)
+
+    def update_sales_manager(self, house_id: int, sales_manager_id: int):
+        """Updates a house's sales manager"""
+        query = self._sql_update
+        sales_manager_id = None if sales_manager_id == "" else sales_manager_id
+        args = {
+            "house_id": house_id,
+            "sales_manager_id": sales_manager_id
+        }
+        try:
+            super()._execute_query(query, args)
+            return True, "Successfully updated that entry"
+        except Exception as e:
+            print(e)
+            logger.exception("Error running UPDATE house's sales manager")
+            return False, str(e)
+
 
 class LennysDB:
     """
@@ -85,9 +120,8 @@ class LennysDB:
     def __init__(self, mysql) -> None:
         self.mysql = mysql
         self.customer_contacts = CustomerContacts(mysql)
+        self.houses = Houses(mysql)
         self.schema = {
-            "customer_contacts": ["id", "first_name", "last_name", "email", "phone_number", "house_id"],
-            "houses": ["id", "street_address", "street_address_2", "city", "state", "zip_code", "yard_size_acres", "sales_manager_id"],
             "jobs": ["id", "date", "total_price", "house_id"],
             "job_workers": ["job_id", "worker_id"],
             "lawnmowers": ["id", "brand", "make_year", "model_name", "is_functional"],
@@ -95,8 +129,6 @@ class LennysDB:
             "workers": ["id", "first_name", "last_name", "email", "phone_number", "lawnmower_id"],
         }
         self.browse_fields = {
-            "customer_contacts": ["ID", "First Name", "Last Name", "Email", "Phone Number", "House ID", "House Address"],
-            "houses": ["ID", "Street Address", "Street Address 2", "City", "State", "ZIP", "Yard Size (acres)", "Sales Manager ID", "Sales Manager Email"],
             "jobs": ["ID", "Date", "Total Price", "House ID", "House Address", "Worker IDs"],
             "job_workers": ["Job ID", "Job Date", "Job House ID", "Job House Address", "Worker ID", "Worker Email"],
             "lawnmowers": ["ID", "Brand", "Make Year", "Model Name", "Is Functional?"],
@@ -115,12 +147,8 @@ class LennysDB:
                 "browse_workers": """SELECT w.id, w.first_name, w.last_name, w.email, w.phone_number, w.lawnmower_id, 
                     l.model_name AS lawnmower_model_name, l.make_year AS lawnmower_make_year FROM workers w 
                     LEFT JOIN lawnmowers l ON l.id = w.lawnmower_id""",
-                "browse_houses": """SELECT h.id, h.street_address, h.street_address_2, h.city, h.state, h.zip_code, 
-                    h.yard_size_acres, h.sales_manager_id, s.email AS sales_manager_email FROM houses h LEFT JOIN sales_managers s ON h.sales_manager_id = s.id""",
                 "browse_lawnmowers": """SELECT id, brand, make_year, model_name, CASE WHEN is_functional = 1 THEN "Yes" ELSE "No" END AS is_functional FROM lawnmowers""",
                 "browse_sales_managers": """SELECT id, region, first_name, last_name, email, phone_number FROM sales_managers""",
-                "browse_customer_contacts": """SELECT c.id, c.first_name, c.last_name, c.email, c.phone_number, c.house_id, h.street_address 
-                    FROM customer_contacts c LEFT JOIN houses h ON c.house_id = h.id""",
                 "search_contacts": """SELECT * FROM `customer_contacts` 
                     WHERE `first_name` LIKE %(first_name)s AND `last_name` LIKE %(last_name)s""",
                 "get_jobs_total_price": """SELECT 50 * `yard_size_acres` AS total_price FROM `houses` 
@@ -138,14 +166,10 @@ class LennysDB:
                     VALUES (%(job_id)s, %(worker_id)s)""",
                 "workers": """INSERT INTO `workers` (`first_name`, `last_name`, `email`, `phone_number`, `lawnmower_id`)
                     VALUES (%(first_name)s, %(last_name)s, %(email)s, %(phone_number)s, %(lawnmower_id)s)""",
-                "houses": """INSERT INTO `houses` (`street_address`, `street_address_2`, `city`, `state`, `zip_code`, `yard_size_acres`, `sales_manager_id`)
-                    VALUES (%(street_address)s, %(street_address_2)s, %(city)s, %(state)s, %(zip_code)s, %(yard_size_acres)s, %(sales_manager_id)s)""",
                 "lawnmowers": """INSERT INTO `lawnmowers` (`brand`, `make_year`, `model_name`, `is_functional`)
                     VALUES (%(brand)s, %(make_year)s, %(model_name)s, %(is_functional)s)""",
                 "sales_managers": """INSERT INTO `sales_managers` (`region`, `first_name`, `last_name`, `email`, `phone_number`)
                     VALUES (%(region)s, %(first_name)s, %(last_name)s, %(email)s, %(phone_number)s)""",
-                "customer_contacts": """INSERT INTO `customer_contacts` (`first_name`, `last_name`, `email`, `phone_number`, `house_id`)
-                    VALUES (%(first_name)s, %(last_name)s, %(email)s, %(phone_number)s, %(house_id)s)""",
             },
             "delete": {
                 "sales_manager": """DELETE FROM `sales_managers` WHERE `id` = %(sales_manager_id)s""",
@@ -201,13 +225,7 @@ class LennysDB:
         query = self.sql["select"]["browse_workers"]
         results = self._execute_query(query)
         return results
-    
-    def select_all_houses(self) -> list:
-        """Selects all fields for the Houses table"""
-        query = self.sql["select"]["browse_houses"]
-        results = self._execute_query(query)
-        return results
-        
+            
     def select_all_lawnmowers(self) -> list:
         """Selects all fields for the Lawnmowers table"""
         query = self.sql["select"]["browse_lawnmowers"]
@@ -218,25 +236,6 @@ class LennysDB:
         """Selects all fields for the Sales Managers table"""
         query = self.sql["select"]["browse_sales_managers"]
         results = self._execute_query(query) 
-        return results
-
-    def select_all_customer_contacts(self) -> list:
-        """Selects all fields for the Customer Contacts table"""
-        query = self.sql["select"]["browse_customer_contacts"]
-        results = self._execute_query(query) 
-        return results
-
-    def search_contacts(self, first_name="", last_name="") -> list:
-        """
-        Given a first/last name, runs a SELECT * query with WHERE filter against
-        the customer contacts table and returns the results
-        """
-        args = {
-            "first_name": f"%{first_name}%",  # add % wildcard characters before and after, for LIKE operator
-            "last_name": f"%{last_name}%"
-        }
-        query = self.sql["select"]["search_contacts"]
-        results = self._execute_query(query, args) 
         return results
 
     def get_jobs_total_price(self, house_id) -> int:
@@ -334,22 +333,6 @@ class LennysDB:
         except Exception as e:
             print(e)
             logger.exception("Error running UPDATE lawnmower status")
-            return False, str(e)
-
-    def update_houses_sales_manager(self, house_id: int, sales_manager_id: int):
-        """Updates a house's sales manager"""
-        query = self.sql["update"]["houses_sales_manager"]
-        sales_manager_id = None if sales_manager_id == "" else sales_manager_id
-        args = {
-            "house_id": house_id,
-            "sales_manager_id": sales_manager_id
-        }
-        try:
-            self._execute_query(query, args)
-            return True, "Successfully updated that entry"
-        except Exception as e:
-            print(e)
-            logger.exception("Error running UPDATE house's sales manager")
             return False, str(e)
 
     def update_job_worker(self, old_job_id, old_worker_id, new_worker_id, new_job_id):
