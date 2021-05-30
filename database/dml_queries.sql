@@ -2,13 +2,27 @@
 -- BROWSE [TABLE] SECTIONS ------------------
 -------------------------------------------------
 -- these are for the Browse TABLE sections of each page of the site
-SELECT * FROM `job`
-SELECT * FROM `job_workers`
-SELECT * FROM `workers`
-SELECT * FROM `houses`
-SELECT * FROM `lawnmowers`
-SELECT * FROM `sales_managers`
-SELECT * FROM `customer_contacts`
+-- Browse Jobs
+SELECT j.id, j.date, j.total_price, j.house_id, h.street_address, GROUP_CONCAT(jw.worker_id SEPARATOR ', ') AS worker_ids 
+FROM jobs j LEFT JOIN job_workers jw ON j.id = jw.job_id LEFT JOIN houses h ON h.id = j.house_id GROUP BY j.id
+-- Browse Job Workers
+SELECT jw.job_id AS job_id, j.date AS job_date, j.house_id AS job_house_id, 
+h.street_address AS job_house_address, jw.worker_id, w.email AS worker_email 
+FROM job_workers jw LEFT JOIN jobs j ON jw.job_id = j.id LEFT JOIN workers w ON jw.worker_id = w.id 
+LEFT JOIN houses h ON h.id = j.house_id
+-- Browse Workers
+SELECT w.id, w.first_name, w.last_name, w.email, w.phone_number, w.lawnmower_id, l.model_name AS lawnmower_model_name, 
+l.make_year AS lawnmower_make_year FROM workers w LEFT JOIN lawnmowers l ON l.id = w.lawnmower_id
+-- Browse Houses
+SELECT h.id, h.street_address, h.street_address_2, h.city, h.state, h.zip_code, h.yard_size_acres, h.sales_manager_id, 
+s.email AS sales_manager_email FROM houses h LEFT JOIN sales_managers s ON h.sales_manager_id = s.id
+-- Browse Lawnmowers
+SELECT id, brand, make_year, model_name, CASE WHEN is_functional = 1 THEN "Yes" ELSE "No" END AS is_functional FROM lawnmowers
+-- Browse Sales Managers
+SELECT id, region, first_name, last_name, email, phone_number FROM sales_managers
+-- Browse Customer Contacts
+SELECT c.id, c.first_name, c.last_name, c.email, c.phone_number, c.house_id, h.street_address 
+FROM customer_contacts c LEFT JOIN houses h ON c.house_id = h.id
 
 
 -------------------------------------------------

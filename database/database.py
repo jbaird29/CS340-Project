@@ -3,7 +3,7 @@ import logging
 
 logger = logging.getLogger()
 
-# SELECT id, date, total_price, house_id, GROUP_CONCAT(worker_id) FROM jobs LEFT JOIN job_workers ON jobs.id = job_workers.job_id GROUP BY jobs.id;
+# SELECT id, date, total_price, house_id, GROUP_CONCAT(worker_id) AS worker_ids FROM jobs LEFT JOIN job_workers ON jobs.id = job_workers.job_id GROUP BY jobs.id;
 
 class LennysDB:
     """
@@ -21,16 +21,32 @@ class LennysDB:
             "workers": ["id", "first_name", "last_name", "email", "phone_number", "lawnmower_id"],
         }
         self.browse_fields = {
-            "customer_contacts": ["ID", "First Name", "Last Name", "Email", "Phone Number", "House ID"],
-            "houses": ["ID", "Street Address", "Street Address 2", "City", "State", "ZIP", "Yard Size (acres)", "Sales Manager ID"],
-            "jobs": ["ID", "Date", "Total Price", "House ID"],
-            "job_workers": ["Job ID", "Worker ID"],
+            "customer_contacts": ["ID", "First Name", "Last Name", "Email", "Phone Number", "House ID", "House Address"],
+            "houses": ["ID", "Street Address", "Street Address 2", "City", "State", "ZIP", "Yard Size (acres)", "Sales Manager ID", "Sales Manager Email"],
+            "jobs": ["ID", "Date", "Total Price", "House ID", "House Address", "Worker IDs"],
+            "job_workers": ["Job ID", "Job Date", "Job House ID", "Job House Address", "Worker ID", "Worker Email"],
             "lawnmowers": ["ID", "Brand", "Make Year", "Model Name", "Is Functional?"],
             "sales_managers": ["ID", "Region", "First Name", "Last Name", "Email", "Phone Number"],
-            "workers": ["ID", "First Name", "Last Name", "Email", "Phone Number", "Lawnmower ID"],
+            "workers": ["ID", "First Name", "Last Name", "Email", "Phone Number", "Lawnmower ID", "Lawnmower Name", "Lawnmower Year"],
         }
         self.sql = {
             "select": {
+                "browse_jobs": """SELECT j.id, j.date, j.total_price, j.house_id, h.street_address, 
+                    GROUP_CONCAT(jw.worker_id SEPARATOR ', ') AS worker_ids FROM jobs j 
+                    LEFT JOIN job_workers jw ON j.id = jw.job_id LEFT JOIN houses h ON h.id = j.house_id GROUP BY j.id""",
+                "browse_job_workers": """SELECT jw.job_id AS job_id, j.date AS job_date, j.house_id AS job_house_id, 
+                    h.street_address AS job_house_address, jw.worker_id, w.email AS worker_email 
+                    FROM job_workers jw LEFT JOIN jobs j ON jw.job_id = j.id LEFT JOIN workers w ON jw.worker_id = w.id 
+                    LEFT JOIN houses h ON h.id = j.house_id""",
+                "browse_workers": """SELECT w.id, w.first_name, w.last_name, w.email, w.phone_number, w.lawnmower_id, 
+                    l.model_name AS lawnmower_model_name, l.make_year AS lawnmower_make_year FROM workers w 
+                    LEFT JOIN lawnmowers l ON l.id = w.lawnmower_id""",
+                "browse_houses": """SELECT h.id, h.street_address, h.street_address_2, h.city, h.state, h.zip_code, 
+                    h.yard_size_acres, h.sales_manager_id, s.email AS sales_manager_email FROM houses h LEFT JOIN sales_managers s ON h.sales_manager_id = s.id""",
+                "browse_lawnmowers": """SELECT id, brand, make_year, model_name, CASE WHEN is_functional = 1 THEN "Yes" ELSE "No" END AS is_functional FROM lawnmowers""",
+                "browse_sales_managers": """SELECT id, region, first_name, last_name, email, phone_number FROM sales_managers""",
+                "browse_customer_contacts": """SELECT c.id, c.first_name, c.last_name, c.email, c.phone_number, c.house_id, h.street_address 
+                    FROM customer_contacts c LEFT JOIN houses h ON c.house_id = h.id""",
                 "search_contacts": """SELECT * FROM `customer_contacts` 
                     WHERE `first_name` LIKE %(first_name)s AND `last_name` LIKE %(last_name)s""",
                 "get_jobs_total_price": """SELECT 50 * `yard_size_acres` AS total_price FROM `houses` 
@@ -84,24 +100,59 @@ class LennysDB:
         cursor.close()
         return results
 
-    def get_table_fields(self, sql_table_name) -> List:
+    def get_table_fields(self, sql_table_name) -> list:
         """Given a table name, returns a list of all the fields in that table"""
         return self.browse_fields[sql_table_name]
     
-    def select_all(self, sql_table_name) -> dict:
+    def select_all(self, sql_table_name) -> list:
         """Given a table name, runs a SELECT * query and returns the results"""
         query = f"""SELECT * FROM {sql_table_name}"""
         results = self._execute_query(query) 
         return results
 
-    def select_all_lawnmowers(self) -> dict:
-        """Runs a SELECT * of all lawnmowers; changes 1 and 0 to Yes and No"""
-        query = f"""SELECT `id`, `brand`, `make_year`, `model_name`, 
-        CASE WHEN `is_functional` = 1 THEN "Yes" ELSE "No" END AS is_functional FROM `lawnmowers` """
+    def select_all_jobs(self) -> list:
+        """Selects all fields for the Jobs table"""
+        query = self.sql["select"]["browse_jobs"]
+        results = self._execute_query(query)
+        return results
+
+    def select_all_job_workers(self) -> list:
+        """Selects all fields for the Jobs Workers table"""
+        query = self.sql["select"]["browse_job_workers"]
+        results = self._execute_query(query)
+        return results
+
+    def select_all_workers(self) -> list:
+        """Selects all fields for the Workers table"""
+        query = self.sql["select"]["browse_workers"]
+        results = self._execute_query(query)
+        return results
+    
+    def select_all_houses(self) -> list:
+        """Selects all fields for the Houses table"""
+        query = self.sql["select"]["browse_houses"]
+        results = self._execute_query(query)
+        return results
+        
+    def select_all_lawnmowers(self) -> list:
+        """Selects all fields for the Lawnmowers table"""
+        query = self.sql["select"]["browse_lawnmowers"]
         results = self._execute_query(query) 
         return results
 
-    def search_contacts(self, first_name="", last_name="") -> dict:
+    def select_all_sales_managers(self) -> list:
+        """Selects all fields for the Sales Managers table"""
+        query = self.sql["select"]["browse_sales_managers"]
+        results = self._execute_query(query) 
+        return results
+
+    def select_all_customer_contacts(self) -> list:
+        """Selects all fields for the Customer Contacts table"""
+        query = self.sql["select"]["browse_customer_contacts"]
+        results = self._execute_query(query) 
+        return results
+
+    def search_contacts(self, first_name="", last_name="") -> list:
         """
         Given a first/last name, runs a SELECT * query with WHERE filter against
         the customer contacts table and returns the results
@@ -155,10 +206,10 @@ class LennysDB:
         results = self._execute_query(query)
         return results
 
-    def insert_into(self, sql_table_name: str, data: dict) -> bool:
+    def insert_into(self, sql_table_name: str, data: dict):
         """
         Given a table name and a dict of field_name:value pairs, inserts the data into table
-        Returns True if executed successfully, otherwise returns False
+        Returns tuple of: (True or False depending on result, status message)
         """
         query = self.sql["insert"].get(sql_table_name)
         args = data

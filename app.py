@@ -47,7 +47,7 @@ def customer_contacts():
         last_name = request.args.get('last_name')
         # if no query params, show all data; otherwise, filter data based on the inputs
         if not first_name and not last_name:
-            table_data = database.select_all(table)
+            table_data = database.select_all_customer_contacts()
         else:
             table_data = database.search_contacts(first_name, last_name)
         fields = database.get_table_fields(table)
@@ -73,7 +73,7 @@ def houses():
             flash(res_msg, rsp_category)
         return redirect(request.url)
     if request.method == 'GET':
-        table_data = database.select_all(table)
+        table_data = database.select_all_houses()
         fields = database.get_table_fields(table)
         sales_manager_ids = database.select_sales_manager_ids()  # populates dropdown
         return render_template("houses.j2", name=name, fields=fields, table_data=table_data, sales_manager_ids=sales_manager_ids)
@@ -105,7 +105,7 @@ def job_workers():
             flash(res_msg, rsp_category)
         return redirect(request.url)
     if request.method == 'GET':
-        table_data = database.select_all(table)
+        table_data = database.select_all_job_workers()
         fields = database.get_table_fields(table)
         job_ids = database.select_job_ids()  # populates dropdown
         worker_ids = database.select_worker_ids()  # populates dropdown
@@ -129,7 +129,7 @@ def jobs():
             flash(res_msg, rsp_category)
         return redirect(request.url)
     if request.method == 'GET':
-        table_data = database.select_all(table)
+        table_data = database.select_all_jobs()
         fields = database.get_table_fields(table)
         house_ids = database.select_house_ids()  # populates dropdown
         return render_template("jobs.j2", name=name, fields=fields, table_data=table_data, house_ids=house_ids)
@@ -175,7 +175,7 @@ def sales_managers():
             flash(res_msg, rsp_category)
         return redirect(request.url)
     if request.method == 'GET':
-        table_data = database.select_all(table)
+        table_data = database.select_all_sales_managers()
         fields = database.get_table_fields(table)
         return render_template("sales-managers.j2", name=name, fields=fields, table_data=table_data)
 
@@ -189,7 +189,7 @@ def workers():
         flash(res_msg, rsp_category)
         return redirect(request.url)
     if request.method == 'GET':  # render the page
-        table_data = database.select_all(table)
+        table_data = database.select_all_workers()
         fields = database.get_table_fields(table)
         lawnmower_ids = database.select_lawnmower_ids()  # populates dropdown
         return render_template("workers.j2", name=name, fields=fields, table_data=table_data, lawnmower_ids=lawnmower_ids)
