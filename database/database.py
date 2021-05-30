@@ -21,7 +21,7 @@ class LennysDB:
             "workers": ["id", "first_name", "last_name", "email", "phone_number", "lawnmower_id"],
         }
         self.browse_fields = {
-            "customer_contacts": ["ID", "First Name", "Last Name", "Email", "Phone Number", "House ID"],
+            "customer_contacts": ["ID", "First Name", "Last Name", "Email", "Phone Number", "House ID", "House Address"],
             "houses": ["ID", "Street Address", "Street Address 2", "City", "State", "ZIP", "Yard Size (acres)", "Sales Manager ID", "Sales Manager Email"],
             "jobs": ["ID", "Date", "Total Price", "House ID", "House Address", "Worker IDs"],
             "job_workers": ["Job ID", "Job Date", "Job House ID", "Job House Address", "Worker ID", "Worker Email"],
@@ -43,6 +43,10 @@ class LennysDB:
                     LEFT JOIN lawnmowers l ON l.id = w.lawnmower_id""",
                 "browse_houses": """SELECT h.id, h.street_address, h.street_address_2, h.city, h.state, h.zip_code, 
                     h.yard_size_acres, h.sales_manager_id, s.email AS sales_manager_email FROM houses h LEFT JOIN sales_managers s ON h.sales_manager_id = s.id""",
+                "browse_lawnmowers": """SELECT id, brand, make_year, model_name, CASE WHEN is_functional = 1 THEN "Yes" ELSE "No" END AS is_functional FROM lawnmowers""",
+                "browse_sales_managers": """SELECT id, region, first_name, last_name, email, phone_number FROM sales_managers""",
+                "browse_customer_contacts": """SELECT c.id, c.first_name, c.last_name, c.email, c.phone_number, c.house_id, h.street_address 
+                    FROM customer_contacts c LEFT JOIN houses h ON c.house_id = h.id""",
                 "search_contacts": """SELECT * FROM `customer_contacts` 
                     WHERE `first_name` LIKE %(first_name)s AND `last_name` LIKE %(last_name)s""",
                 "get_jobs_total_price": """SELECT 50 * `yard_size_acres` AS total_price FROM `houses` 
@@ -130,10 +134,21 @@ class LennysDB:
         results = self._execute_query(query)
         return results
         
-    def select_all_lawnmowers(self) -> dict:
-        """Runs a SELECT * of all lawnmowers; changes 1 and 0 to Yes and No"""
-        query = f"""SELECT `id`, `brand`, `make_year`, `model_name`, 
-        CASE WHEN `is_functional` = 1 THEN "Yes" ELSE "No" END AS is_functional FROM `lawnmowers` """
+    def select_all_lawnmowers(self) -> list:
+        """Selects all fields for the Lawnmowers table"""
+        query = self.sql["select"]["browse_lawnmowers"]
+        results = self._execute_query(query) 
+        return results
+
+    def select_all_sales_managers(self) -> list:
+        """Selects all fields for the Sales Managers table"""
+        query = self.sql["select"]["browse_sales_managers"]
+        results = self._execute_query(query) 
+        return results
+
+    def select_all_customer_contacts(self) -> list:
+        """Selects all fields for the Customer Contacts table"""
+        query = self.sql["select"]["browse_customer_contacts"]
         results = self._execute_query(query) 
         return results
 

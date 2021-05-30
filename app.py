@@ -47,7 +47,7 @@ def customer_contacts():
         last_name = request.args.get('last_name')
         # if no query params, show all data; otherwise, filter data based on the inputs
         if not first_name and not last_name:
-            table_data = database.select_all(table)
+            table_data = database.select_all_customer_contacts()
         else:
             table_data = database.search_contacts(first_name, last_name)
         fields = database.get_table_fields(table)
@@ -175,7 +175,7 @@ def sales_managers():
             flash(res_msg, rsp_category)
         return redirect(request.url)
     if request.method == 'GET':
-        table_data = database.select_all(table)
+        table_data = database.select_all_sales_managers()
         fields = database.get_table_fields(table)
         return render_template("sales-managers.j2", name=name, fields=fields, table_data=table_data)
 

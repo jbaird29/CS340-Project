@@ -17,11 +17,12 @@ l.make_year AS lawnmower_make_year FROM workers w LEFT JOIN lawnmowers l ON l.id
 SELECT h.id, h.street_address, h.street_address_2, h.city, h.state, h.zip_code, h.yard_size_acres, h.sales_manager_id, 
 s.email AS sales_manager_email FROM houses h LEFT JOIN sales_managers s ON h.sales_manager_id = s.id
 -- Browse Lawnmowers
-SELECT * FROM `lawnmowers`
+SELECT id, brand, make_year, model_name, CASE WHEN is_functional = 1 THEN "Yes" ELSE "No" END AS is_functional FROM lawnmowers
 -- Browse Sales Managers
-SELECT * FROM `sales_managers`
+SELECT id, region, first_name, last_name, email, phone_number FROM sales_managers
 -- Browse Customer Contacts
-SELECT * FROM `customer_contacts`
+SELECT c.id, c.first_name, c.last_name, c.email, c.phone_number, c.house_id, h.street_address 
+FROM customer_contacts c LEFT JOIN houses h ON c.house_id = h.id
 
 
 -------------------------------------------------
