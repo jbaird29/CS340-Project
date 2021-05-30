@@ -73,7 +73,7 @@ def houses():
             flash(res_msg, rsp_category)
         return redirect(request.url)
     if request.method == 'GET':
-        table_data = database.select_all(table)
+        table_data = database.select_all_houses()
         fields = database.get_table_fields(table)
         sales_manager_ids = database.select_sales_manager_ids()  # populates dropdown
         return render_template("houses.j2", name=name, fields=fields, table_data=table_data, sales_manager_ids=sales_manager_ids)

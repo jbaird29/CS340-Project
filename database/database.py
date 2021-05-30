@@ -22,7 +22,7 @@ class LennysDB:
         }
         self.browse_fields = {
             "customer_contacts": ["ID", "First Name", "Last Name", "Email", "Phone Number", "House ID"],
-            "houses": ["ID", "Street Address", "Street Address 2", "City", "State", "ZIP", "Yard Size (acres)", "Sales Manager ID"],
+            "houses": ["ID", "Street Address", "Street Address 2", "City", "State", "ZIP", "Yard Size (acres)", "Sales Manager ID", "Sales Manager Email"],
             "jobs": ["ID", "Date", "Total Price", "House ID", "House Address", "Worker IDs"],
             "job_workers": ["Job ID", "Job Date", "Job House ID", "Job House Address", "Worker ID", "Worker Email"],
             "lawnmowers": ["ID", "Brand", "Make Year", "Model Name", "Is Functional?"],
@@ -41,6 +41,8 @@ class LennysDB:
                 "browse_workers": """SELECT w.id, w.first_name, w.last_name, w.email, w.phone_number, w.lawnmower_id, 
                     l.model_name AS lawnmower_model_name, l.make_year AS lawnmower_make_year FROM workers w 
                     LEFT JOIN lawnmowers l ON l.id = w.lawnmower_id""",
+                "browse_houses": """SELECT h.id, h.street_address, h.street_address_2, h.city, h.state, h.zip_code, 
+                    h.yard_size_acres, h.sales_manager_id, s.email AS sales_manager_email FROM houses h LEFT JOIN sales_managers s ON h.sales_manager_id = s.id""",
                 "search_contacts": """SELECT * FROM `customer_contacts` 
                     WHERE `first_name` LIKE %(first_name)s AND `last_name` LIKE %(last_name)s""",
                 "get_jobs_total_price": """SELECT 50 * `yard_size_acres` AS total_price FROM `houses` 
@@ -119,6 +121,12 @@ class LennysDB:
     def select_all_workers(self) -> list:
         """Selects all fields for the Workers table"""
         query = self.sql["select"]["browse_workers"]
+        results = self._execute_query(query)
+        return results
+    
+    def select_all_houses(self) -> list:
+        """Selects all fields for the Houses table"""
+        query = self.sql["select"]["browse_houses"]
         results = self._execute_query(query)
         return results
         

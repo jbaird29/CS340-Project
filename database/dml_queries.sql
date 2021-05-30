@@ -14,7 +14,8 @@ LEFT JOIN houses h ON h.id = j.house_id
 SELECT w.id, w.first_name, w.last_name, w.email, w.phone_number, w.lawnmower_id, l.model_name AS lawnmower_model_name, 
 l.make_year AS lawnmower_make_year FROM workers w LEFT JOIN lawnmowers l ON l.id = w.lawnmower_id
 -- Browse Houses
-SELECT * FROM `houses`
+SELECT h.id, h.street_address, h.street_address_2, h.city, h.state, h.zip_code, h.yard_size_acres, h.sales_manager_id, 
+s.email AS sales_manager_email FROM houses h LEFT JOIN sales_managers s ON h.sales_manager_id = s.id
 -- Browse Lawnmowers
 SELECT * FROM `lawnmowers`
 -- Browse Sales Managers
