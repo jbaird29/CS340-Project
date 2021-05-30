@@ -55,7 +55,6 @@ def customer_contacts():
 
 @app.route('/houses',methods=['GET', 'POST'])
 def houses():
-    table = 'houses'
     if request.method == 'POST':
         form_data = request.form.copy()
         form_type = form_data.get('type')
@@ -106,30 +105,30 @@ def job_workers():
     if request.method == 'GET':
         table_data = database.select_all_job_workers()
         fields = database.get_table_fields(table)
-        job_ids = database.select_job_ids()  # populates dropdown
+        job_ids = database.jobs.select_ids()  # populates dropdown
         worker_ids = database.select_worker_ids()  # populates dropdown
         return render_template("job-workers.j2", name=name, fields=fields, table_data=table_data, job_ids=job_ids, worker_ids=worker_ids)
 
 @app.route('/jobs',methods=['GET', 'POST'])
 def jobs():
-    table = 'jobs'
-    name = "Jobs"
+    
     if request.method == 'POST':
         form_data = request.form.copy()
         form_type = form_data.get('type')
         if form_type == 'delete':
             job_id = form_data.get('id')
-            valid, res_msg = database.delete_job(job_id)
+            valid, res_msg = database.jobs.delete_job(job_id)
             rsp_category = 'success' if valid else 'error'
             flash(res_msg, rsp_category)
         elif form_type == 'insert':
-            valid, res_msg = database.insert_into(table, form_data)
+            valid, res_msg = database.jobs.insert_into(form_data)
             rsp_category = 'success' if valid else 'error'
             flash(res_msg, rsp_category)
         return redirect(request.url)
     if request.method == 'GET':
-        table_data = database.select_all_jobs()
-        fields = database.get_table_fields(table)
+        name = database.jobs.get_title()
+        table_data = database.jobs.select_all()
+        fields = database.jobs.get_field_titles()
         house_ids = database.select_house_ids()  # populates dropdown
         return render_template("jobs.j2", name=name, fields=fields, table_data=table_data, house_ids=house_ids)
 
