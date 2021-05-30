@@ -3,6 +3,8 @@ import logging
 
 logger = logging.getLogger()
 
+# SELECT id, date, total_price, house_id, GROUP_CONCAT(worker_id) FROM jobs LEFT JOIN job_workers ON jobs.id = job_workers.job_id GROUP BY jobs.id;
+
 class LennysDB:
     """
     Represents the database connection and it schema, with methods to perform CRUD queries
@@ -17,6 +19,15 @@ class LennysDB:
             "lawnmowers": ["id", "brand", "make_year", "model_name", "is_functional"],
             "sales_managers": ["id", "region", "first_name", "last_name", "email", "phone_number"],
             "workers": ["id", "first_name", "last_name", "email", "phone_number", "lawnmower_id"],
+        }
+        self.browse_fields = {
+            "customer_contacts": ["ID", "First Name", "Last Name", "Email", "Phone Number", "House ID"],
+            "houses": ["ID", "Street Address", "Street Address 2", "City", "State", "ZIP", "Yard Size (acres)", "Sales Manager ID"],
+            "jobs": ["ID", "Date", "Total Price", "House ID"],
+            "job_workers": ["Job ID", "Worker ID"],
+            "lawnmowers": ["ID", "Brand", "Make Year", "Model Name", "Is Functional?"],
+            "sales_managers": ["ID", "Region", "First Name", "Last Name", "Email", "Phone Number"],
+            "workers": ["ID", "First Name", "Last Name", "Email", "Phone Number", "Lawnmower ID"],
         }
         self.sql = {
             "select": {
@@ -75,7 +86,7 @@ class LennysDB:
 
     def get_table_fields(self, sql_table_name) -> List:
         """Given a table name, returns a list of all the fields in that table"""
-        return self.schema[sql_table_name]
+        return self.browse_fields[sql_table_name]
     
     def select_all(self, sql_table_name) -> dict:
         """Given a table name, runs a SELECT * query and returns the results"""
