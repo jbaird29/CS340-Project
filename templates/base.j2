@@ -25,6 +25,24 @@
 
         <main role="main" class="container">
 
+            {% block title %}
+                <h1 class="mt-4 text-center">{{name}} Table</h1>
+            {% endblock %}
+
+            {% block message_flash %}
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        {% if category == 'error' %}
+                            <div class="alert alert-danger" role="alert">ERROR: {{message}}</div>
+                        {% else %}
+                            <div class="alert alert-primary" role="alert">{{message}}</div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            {% endblock %}
+
             {# This holds the page-specific sections (i.e. search for customer contact) #}
             {% block main %}{% endblock %}
 

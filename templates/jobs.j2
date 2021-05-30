@@ -1,9 +1,7 @@
 {% extends "base.j2" %}
 {% block main %}
-    <h1 class="mt-4 text-center">Jobs Table</h1>
-
     <h3 class="mt-4">Add a New Job</h3>
-    <form method="POST" action="/insert">
+    <form method="POST">
         <div class="row">
             <div class="col">
                 <label for="date">Job Date*</label>
@@ -23,8 +21,9 @@
                 </select>
             </div>
         </div>
-        <button name="table_name" value="jobs" type="submit" class="btn btn-outline-light mt-2">Submit</button>
+        <button name="type" value="insert" type="submit" class="btn btn-outline-light mt-2">Submit</button>
         <span>* indicates a required field</span>
+        <div>Note: total price is calculated by $50 * the house's acre size</div>
     </form>
 {% endblock %}
 {% block browse %}
@@ -45,7 +44,8 @@
             {% endfor %}
 
             <td>
-            <form method="POST" action="/delete-job">
+            <form method="POST">
+                <input type="hidden" name="type" value="delete" />
                 <button name="id" value="{{row['id']}}" type="submit" class="btn btn-outline-light btn-sm">Delete</button>
             </form>
             </td>

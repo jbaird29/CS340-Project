@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, json
+from flask import Flask, render_template, redirect, request, flash, json
 from flask_mysqldb import MySQL
 import os
 from database.database import LennysDB
@@ -17,6 +17,9 @@ app.config['MYSQL_DB'] = os.environ.get("340DB")
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
 
+# configure secret for sessions
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
+
 # instantiate a Database for ease of running queries
 database = LennysDB(mysql)
 
@@ -29,137 +32,167 @@ def root():
 def server_err():
     return render_template("500-error.j2") 
 
-@app.route('/insert',methods=['POST'])
-def insert_request():
-    """This is the handler for EVERY insert operation; all forms POST to this route"""
-    # TODO: might want to add more server-side form validation; only have client-side right now
-    data: dict = request.form.copy()
-    # every form data has a "table_name" key:value pair (inputted from the submit button)
-    # this extracts it from the dict and uses it the table for the insert operation
-    table_name: str = data.pop('table_name')
-    valid = database.insert_into(table_name, data)
-    if valid:
-        route_name = table_name.replace('_', '-')
-        return redirect(f'/{route_name}')  # effectively refreshes the page and shows the newly added table_data
-    else:
-        return redirect("/500") 
-
-@app.route('/delete-sales-manager',methods=['POST'])
-def delete_sales_manager():
-    sales_manager_id = request.form.get('id')
-    valid = database.delete_sales_manager(sales_manager_id)
-    if valid:
-        return redirect('/sales-managers')
-    else:
-        return redirect("/500")
-
-@app.route('/update-lawnmower-status', methods=['POST'])
-def update_lawnmower_status():
-    lawnmower_id = request.form.get('id')
-    is_functional = request.form.get('is_functional')
-    valid = database.update_lawnmower_status(lawnmower_id, is_functional)
-    if valid:
-        return redirect('/lawnmowers')
-    else:
-        return redirect("/500")
-
-@app.route('/update-houses-sales-manager', methods=['POST'])
-def update_houses_sales_manager():
-    house_id = request.form.get('id')
-    sales_manager_id = request.form.get('sales_manager_id')
-    valid = database.update_houses_sales_manager(house_id, sales_manager_id)
-    if valid:
-        return redirect('/houses')
-    else:
-        return redirect("/500")
-
-@app.route('/update-job-worker', methods=['POST'])
-def update_job_worker():
-    old_job_id = request.form.get('old_job_id')
-    old_worker_id = request.form.get('old_worker_id')
-    new_worker_id = request.form.get('new_worker_id')
-    new_job_id = request.form.get('new_job_id')
-    valid = database.update_job_worker(old_job_id, old_worker_id, new_worker_id, new_job_id)
-    if valid:
-        return redirect('/job-workers')
-    else:
-        return redirect("/500")
-
-@app.route('/delete-job-worker', methods=['POST'])
-def delete_job_woker():
-    job_id = request.form.get('job_id')
-    worker_id = request.form.get('worker_id')
-    valid = database.delete_job_worker(job_id, worker_id)
-    if valid:
-        return redirect('/job-workers')
-    else:
-        return redirect("/500")
-
-@app.route('/delete-job', methods=['POST'])
-def delete_job():
-    job_id = request.form.get('id')
-    valid = database.delete_job(job_id)
-    if valid:
-        return redirect('/jobs')
-    else:
-        return redirect("/500")
-
-
-@app.route('/customer-contacts',methods=['GET'])
+@app.route('/customer-contacts',methods=['GET', 'POST'])
 def customer_contacts():
-    # first and last name query params are used for the "Search" functionality
-    first_name = request.args.get('first_name')
-    last_name = request.args.get('last_name')
-    # if no query params, show all data; otherwise, filter data based on the inputs
-    if not first_name and not last_name:
-        table_data = database.select_all('customer_contacts')
-    else:
-        table_data = database.search_contacts(first_name, last_name)
-    fields = database.get_table_fields('customer_contacts')
-    house_ids = database.select_house_ids()  # populates dropdown
-    return render_template("customer-contacts.j2", name="Customer Contacts", fields=fields, table_data=table_data, house_ids=house_ids)
+    table = 'customer_contacts'
+    name = "Customer Contacts"
+    if request.method == 'POST':
+        valid, res_msg = database.insert_into(table, request.form.copy())
+        rsp_category = 'success' if valid else 'error'
+        flash(res_msg, rsp_category)
+        return redirect(request.url)
+    if request.method == 'GET':
+        # first and last name query params are used for the "Search" functionality
+        first_name = request.args.get('first_name')
+        last_name = request.args.get('last_name')
+        # if no query params, show all data; otherwise, filter data based on the inputs
+        if not first_name and not last_name:
+            table_data = database.select_all(table)
+        else:
+            table_data = database.search_contacts(first_name, last_name)
+        fields = database.get_table_fields(table)
+        house_ids = database.select_house_ids()  # populates dropdown
+        return render_template("customer-contacts.j2", name=name, fields=fields, table_data=table_data, house_ids=house_ids)
 
-@app.route('/houses',methods=['GET'])
+@app.route('/houses',methods=['GET', 'POST'])
 def houses():
-    table_data = database.select_all('houses')
-    fields = database.get_table_fields('houses')
-    sales_manager_ids = database.select_sales_manager_ids()  # populates dropdown
-    return render_template("houses.j2", name="Houses", fields=fields, table_data=table_data, sales_manager_ids=sales_manager_ids)
+    table = 'houses'
+    name = "Houses"
+    if request.method == 'POST':
+        form_data = request.form.copy()
+        form_type = form_data.get('type')
+        if form_type == 'update':
+            house_id = form_data.get('id')
+            sales_manager_id = form_data.get('sales_manager_id')
+            valid, res_msg = database.update_houses_sales_manager(house_id, sales_manager_id)
+            rsp_category = 'success' if valid else 'error'
+            flash(res_msg, rsp_category)
+        elif form_type == 'insert':
+            valid, res_msg = database.insert_into(table, form_data)
+            rsp_category = 'success' if valid else 'error'
+            flash(res_msg, rsp_category)
+        return redirect(request.url)
+    if request.method == 'GET':
+        table_data = database.select_all(table)
+        fields = database.get_table_fields(table)
+        sales_manager_ids = database.select_sales_manager_ids()  # populates dropdown
+        return render_template("houses.j2", name=name, fields=fields, table_data=table_data, sales_manager_ids=sales_manager_ids)
 
-@app.route('/job-workers',methods=['GET'])
+@app.route('/job-workers',methods=['GET', 'POST'])
 def job_workers():
-    table_data = database.select_all('job_workers')
-    fields = database.get_table_fields('job_workers')
-    job_ids = database.select_job_ids()  # populates dropdown
-    worker_ids = database.select_worker_ids()  # populates dropdown
-    return render_template("job-workers.j2", name="Job Workers", fields=fields, table_data=table_data, job_ids=job_ids, worker_ids=worker_ids)
+    table = 'job_workers'
+    name = "Job Workers"
+    if request.method == 'POST':
+        form_data = request.form.copy()
+        form_type = form_data.get('type')
+        if form_type == 'delete':
+            job_id = request.form.get('job_id')
+            worker_id = request.form.get('worker_id')
+            valid, res_msg = database.delete_job_worker(job_id, worker_id)
+            rsp_category = 'success' if valid else 'error'
+            flash(res_msg, rsp_category)
+        elif form_type == 'update':
+            old_job_id = request.form.get('old_job_id')
+            old_worker_id = request.form.get('old_worker_id')
+            new_worker_id = request.form.get('new_worker_id')
+            new_job_id = request.form.get('new_job_id')
+            valid, res_msg = database.update_job_worker(old_job_id, old_worker_id, new_worker_id, new_job_id)
+            rsp_category = 'success' if valid else 'error'
+            flash(res_msg, rsp_category)
+        elif form_type == 'insert':
+            valid, res_msg = database.insert_into(table, form_data)
+            rsp_category = 'success' if valid else 'error'
+            flash(res_msg, rsp_category)
+        return redirect(request.url)
+    if request.method == 'GET':
+        table_data = database.select_all(table)
+        fields = database.get_table_fields(table)
+        job_ids = database.select_job_ids()  # populates dropdown
+        worker_ids = database.select_worker_ids()  # populates dropdown
+        return render_template("job-workers.j2", name=name, fields=fields, table_data=table_data, job_ids=job_ids, worker_ids=worker_ids)
 
-@app.route('/jobs',methods=['GET'])
+@app.route('/jobs',methods=['GET', 'POST'])
 def jobs():
-    table_data = database.select_all('jobs')
-    fields = database.get_table_fields('jobs')
-    house_ids = database.select_house_ids()  # populates dropdown
-    return render_template("jobs.j2", name="Jobs", fields=fields, table_data=table_data, house_ids=house_ids)
+    table = 'jobs'
+    name = "Jobs"
+    if request.method == 'POST':
+        form_data = request.form.copy()
+        form_type = form_data.get('type')
+        if form_type == 'delete':
+            job_id = form_data.get('id')
+            valid, res_msg = database.delete_job(job_id)
+            rsp_category = 'success' if valid else 'error'
+            flash(res_msg, rsp_category)
+        elif form_type == 'insert':
+            valid, res_msg = database.insert_into(table, form_data)
+            rsp_category = 'success' if valid else 'error'
+            flash(res_msg, rsp_category)
+        return redirect(request.url)
+    if request.method == 'GET':
+        table_data = database.select_all(table)
+        fields = database.get_table_fields(table)
+        house_ids = database.select_house_ids()  # populates dropdown
+        return render_template("jobs.j2", name=name, fields=fields, table_data=table_data, house_ids=house_ids)
 
-@app.route('/lawnmowers',methods=['GET'])
+@app.route('/lawnmowers',methods=['GET', 'POST'])
 def lawnmowers():
-    table_data = database.select_all_lawnmowers()
-    fields = database.get_table_fields('lawnmowers')
-    return render_template("lawnmowers.j2", name="Lawnmowers", fields=fields, table_data=table_data)
+    table = 'lawnmowers'
+    name = "Lawnmowers"
+    if request.method == 'POST':
+        form_data = request.form.copy()
+        form_type = form_data.get('type')
+        if form_type == 'update':
+            lawnmower_id = form_data.get('id')
+            is_functional = form_data.get('is_functional')
+            valid, res_msg = database.update_lawnmower_status(lawnmower_id, is_functional)
+            rsp_category = 'success' if valid else 'error'
+            flash(res_msg, rsp_category)
+        elif form_type == 'insert':
+            valid, res_msg = database.insert_into(table, form_data)
+            rsp_category = 'success' if valid else 'error'
+            flash(res_msg, rsp_category)
+        return redirect(request.url)
+    if request.method == 'GET':
+        table_data = database.select_all_lawnmowers()
+        fields = database.get_table_fields(table)
+        return render_template("lawnmowers.j2", name=name, fields=fields, table_data=table_data)
 
-@app.route('/sales-managers',methods=['GET'])
+@app.route('/sales-managers',methods=['GET', 'POST'])
 def sales_managers():
-    table_data = database.select_all('sales_managers')
-    fields = database.get_table_fields('sales_managers')
-    return render_template("sales-managers.j2", name="Sales Managers", fields=fields, table_data=table_data)
+    table = 'sales_managers'
+    name = "Sales Managers"
+    if request.method == 'POST':
+        form_data = request.form.copy()
+        form_type = form_data.get('type')
+        if form_type == 'delete':
+            sales_manager_id = request.form.get('id')
+            valid, res_msg = database.delete_sales_manager(sales_manager_id)
+            rsp_category = 'success' if valid else 'error'
+            flash(res_msg, rsp_category)
+        elif form_type == 'insert':
+            valid, res_msg = database.insert_into(table, form_data)
+            rsp_category = 'success' if valid else 'error'
+            flash(res_msg, rsp_category)
+        return redirect(request.url)
+    if request.method == 'GET':
+        table_data = database.select_all(table)
+        fields = database.get_table_fields(table)
+        return render_template("sales-managers.j2", name=name, fields=fields, table_data=table_data)
 
-@app.route('/workers',methods=['GET'])
+@app.route('/workers',methods=['GET', 'POST'])
 def workers():
-    table_data = database.select_all('workers')
-    fields = database.get_table_fields('workers')
-    lawnmower_ids = database.select_lawnmower_ids()  # populates dropdown
-    return render_template("workers.j2", name="Workers", fields=fields, table_data=table_data, lawnmower_ids=lawnmower_ids)
-
+    table = 'workers'
+    name = "Workers"
+    if request.method == 'POST':  # inserting a new entry
+        valid, res_msg = database.insert_into(table, request.form.copy())
+        rsp_category = 'success' if valid else 'error'
+        flash(res_msg, rsp_category)
+        return redirect(request.url)
+    if request.method == 'GET':  # render the page
+        table_data = database.select_all(table)
+        fields = database.get_table_fields(table)
+        lawnmower_ids = database.select_lawnmower_ids()  # populates dropdown
+        return render_template("workers.j2", name=name, fields=fields, table_data=table_data, lawnmower_ids=lawnmower_ids)
 
 # Listener
 if __name__ == "__main__":

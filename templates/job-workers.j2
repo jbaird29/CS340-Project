@@ -1,9 +1,7 @@
 {% extends "base.j2" %}
 {% block main %}
-    <h1 class="mt-4 text-center">Job Workers Table</h1>
-
     <h3 class="mt-4">Add a New Job Worker</h3>
-    <form method="POST" action="/insert">
+    <form method="POST">
         <div class="row">
             <div class="col">
                 <label for="job_id">Job ID*</label>
@@ -22,7 +20,7 @@
                 </select>
             </div>
         </div>
-        <button name="table_name" value="job_workers" type="submit" class="btn btn-outline-light mt-2">Submit</button>
+        <button name="type" value="insert" type="submit" class="btn btn-outline-light mt-2">Submit</button>
         <span>* indicates a required field</span>
     </form>
 {% endblock %}
@@ -34,8 +32,8 @@
             {% for field in fields %}
             <th scope="col">{{ field.replace("_", " ") }}</th>
             {% endfor %}
-            <th>update</th>
-            <th>delete</th>
+            <th>Update</th>
+            <th>Delete</th>
         </tr>
     </thead>
     <tbody>
@@ -53,7 +51,8 @@
             </td>
 
             <td>
-            <form method="POST" action="/delete-job-worker">
+            <form method="POST">
+                <input type="hidden" name="type" value="delete" />
                 <input type="hidden" name="job_id" value="{{row['job_id']}}" />
                 <input type="hidden" name="worker_id" value="{{row['worker_id']}}" />
                 <button type="submit" class="btn btn-outline-light btn-sm">Delete</button>
@@ -71,8 +70,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="/update-job-worker">
-
+                <form method="POST">
+                    <input type="hidden" name="type" value="update" />
                     <input type="hidden" name="old_job_id" value="{{row['job_id']}}" />
                     <input type="hidden" name="old_worker_id" value="{{row['worker_id']}}" />
 

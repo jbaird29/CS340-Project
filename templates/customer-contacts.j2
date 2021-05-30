@@ -1,8 +1,7 @@
 {% extends "base.j2" %}
 {% block main%}
-    <h1 class="mt-4 text-center">Customer Contacts Table</h1>
     <h3 class="mt-4">Add a New Contact</h3>
-    <form method="POST" action="/insert">
+    <form method="POST">
         <div class="row">
             <div class="col">
                 <label for="first_name">First Name*</label>
@@ -56,7 +55,7 @@
             </div>
         </div>
         <button type="submit" class="btn btn-outline-light mt-2">Submit</button>
-        <a href="/customer-contacts"><button class="btn btn-outline-light mt-2">Clear</button></a>
+        <a class="btn btn-outline-light mt-2" href="/customer-contacts">Clear</a>
     </form>
         
 {% endblock %}
