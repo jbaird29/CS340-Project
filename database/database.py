@@ -3,7 +3,80 @@ import logging
 
 logger = logging.getLogger()
 
-# SELECT id, date, total_price, house_id, GROUP_CONCAT(worker_id) AS worker_ids FROM jobs LEFT JOIN job_workers ON jobs.id = job_workers.job_id GROUP BY jobs.id;
+class BaseTable:
+    """Base Table class from which all other tables inherit"""
+    def __init__(self, mysql, title, fields, field_titles, sql_browse, sql_insert) -> None:
+        self._mysql = mysql
+        self._title = title
+        self._fields = fields
+        self._field_titles = field_titles
+        self._sql_browse = sql_browse
+        self._sql_insert = sql_insert
+
+    def _execute_query(self, query, args=None) -> dict:
+        """Given a templated query and its arguments, executes the query and returns its results
+        Convenience method for ease of opening / closing connections"""
+        cursor = self._mysql.connection.cursor()
+        cursor.execute(query, args)
+        self._mysql.connection.commit()
+        results = cursor.fetchall()
+        cursor.close()
+        return results
+
+    def get_field_titles(self) -> list:
+        """Returns a list of all the field titles in the table"""
+        return self._field_titles
+
+    def get_title(self) -> str:
+        """Returns the title of the table"""
+        return self._title
+
+
+    def select_all(self) -> list:
+        """Selects all fields for the browse section of the UI"""
+        query = self._sql_browse
+        return self._execute_query(query)
+    
+    def insert_into(self, data: dict):
+        """Given a table name and a dict of field_name:value pairs, inserts the data into table
+        Returns tuple of: (True or False depending on result, status message)"""
+        query = self._sql_insert
+        args = data
+        print(args)
+        try:
+            self._execute_query(query, args)
+            return True, "Successfully inserted that entry."
+        except Exception as e:
+            logger.exception("Error running INSERT operation")
+            print(e)
+            return False, str(e)
+
+
+class CustomerContacts(BaseTable):
+    """Customer Contacts table"""
+
+    def __init__(self, mysql) -> None:
+        title = "Customer Contacts"
+        fields = ["id", "first_name", "last_name", "email", "phone_number", "house_id"]
+        field_titles = ["ID", "First Name", "Last Name", "Email", "Phone Number", "House ID", "House Address"]
+        sql_browse =  """SELECT c.id, c.first_name, c.last_name, c.email, c.phone_number, c.house_id, h.street_address 
+                FROM customer_contacts c LEFT JOIN houses h ON c.house_id = h.id"""
+        sql_insert = """INSERT INTO `customer_contacts` (`first_name`, `last_name`, `email`, `phone_number`, `house_id`)
+                VALUES (%(first_name)s, %(last_name)s, %(email)s, %(phone_number)s, %(house_id)s)"""
+        super().__init__(mysql, title, fields, field_titles, sql_browse, sql_insert)
+        self.sql_search = sql_browse + """ WHERE c.first_name LIKE %(first_name)s AND c.last_name LIKE %(last_name)s"""
+
+    def search(self, first_name="", last_name="") -> list:
+        """Given a first/last name, runs a SELECT query with WHERE filter against the customer contacts table and returns the results
+        """
+        args = {
+            "first_name": f"%{first_name}%",  # add % wildcard characters before and after, for LIKE operator
+            "last_name": f"%{last_name}%"
+        }
+        query = self.sql_search
+        print(query)
+        return super()._execute_query(query, args) 
+
 
 class LennysDB:
     """
@@ -11,6 +84,7 @@ class LennysDB:
     """
     def __init__(self, mysql) -> None:
         self.mysql = mysql
+        self.customer_contacts = CustomerContacts(mysql)
         self.schema = {
             "customer_contacts": ["id", "first_name", "last_name", "email", "phone_number", "house_id"],
             "houses": ["id", "street_address", "street_address_2", "city", "state", "zip_code", "yard_size_acres", "sales_manager_id"],

@@ -34,10 +34,8 @@ def server_err():
 
 @app.route('/customer-contacts',methods=['GET', 'POST'])
 def customer_contacts():
-    table = 'customer_contacts'
-    name = "Customer Contacts"
     if request.method == 'POST':
-        valid, res_msg = database.insert_into(table, request.form.copy())
+        valid, res_msg = database.customer_contacts.insert_into(request.form.copy())
         rsp_category = 'success' if valid else 'error'
         flash(res_msg, rsp_category)
         return redirect(request.url)
@@ -47,10 +45,11 @@ def customer_contacts():
         last_name = request.args.get('last_name')
         # if no query params, show all data; otherwise, filter data based on the inputs
         if not first_name and not last_name:
-            table_data = database.select_all_customer_contacts()
+            table_data = database.customer_contacts.select_all()
         else:
-            table_data = database.search_contacts(first_name, last_name)
-        fields = database.get_table_fields(table)
+            table_data = database.customer_contacts.search(first_name, last_name)
+        name = database.customer_contacts.get_title()
+        fields = database.customer_contacts.get_field_titles()
         house_ids = database.select_house_ids()  # populates dropdown
         return render_template("customer-contacts.j2", name=name, fields=fields, table_data=table_data, house_ids=house_ids)
 
