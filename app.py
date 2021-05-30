@@ -189,7 +189,7 @@ def workers():
         flash(res_msg, rsp_category)
         return redirect(request.url)
     if request.method == 'GET':  # render the page
-        table_data = database.select_all(table)
+        table_data = database.select_all_workers()
         fields = database.get_table_fields(table)
         lawnmower_ids = database.select_lawnmower_ids()  # populates dropdown
         return render_template("workers.j2", name=name, fields=fields, table_data=table_data, lawnmower_ids=lawnmower_ids)

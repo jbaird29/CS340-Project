@@ -27,7 +27,7 @@ class LennysDB:
             "job_workers": ["Job ID", "Job Date", "Job House ID", "Job House Address", "Worker ID", "Worker Email"],
             "lawnmowers": ["ID", "Brand", "Make Year", "Model Name", "Is Functional?"],
             "sales_managers": ["ID", "Region", "First Name", "Last Name", "Email", "Phone Number"],
-            "workers": ["ID", "First Name", "Last Name", "Email", "Phone Number", "Lawnmower ID"],
+            "workers": ["ID", "First Name", "Last Name", "Email", "Phone Number", "Lawnmower ID", "Lawnmower Name", "Lawnmower Year"],
         }
         self.sql = {
             "select": {
@@ -38,6 +38,9 @@ class LennysDB:
                     h.street_address AS job_house_address, jw.worker_id, w.email AS worker_email 
                     FROM job_workers jw LEFT JOIN jobs j ON jw.job_id = j.id LEFT JOIN workers w ON jw.worker_id = w.id 
                     LEFT JOIN houses h ON h.id = j.house_id""",
+                "browse_workers": """SELECT w.id, w.first_name, w.last_name, w.email, w.phone_number, w.lawnmower_id, 
+                    l.model_name AS lawnmower_model_name, l.make_year AS lawnmower_make_year FROM workers w 
+                    LEFT JOIN lawnmowers l ON l.id = w.lawnmower_id""",
                 "search_contacts": """SELECT * FROM `customer_contacts` 
                     WHERE `first_name` LIKE %(first_name)s AND `last_name` LIKE %(last_name)s""",
                 "get_jobs_total_price": """SELECT 50 * `yard_size_acres` AS total_price FROM `houses` 
@@ -108,10 +111,17 @@ class LennysDB:
         return results
 
     def select_all_job_workers(self) -> list:
+        """Selects all fields for the Jobs Workers table"""
         query = self.sql["select"]["browse_job_workers"]
         results = self._execute_query(query)
         return results
 
+    def select_all_workers(self) -> list:
+        """Selects all fields for the Workers table"""
+        query = self.sql["select"]["browse_workers"]
+        results = self._execute_query(query)
+        return results
+        
     def select_all_lawnmowers(self) -> dict:
         """Runs a SELECT * of all lawnmowers; changes 1 and 0 to Yes and No"""
         query = f"""SELECT `id`, `brand`, `make_year`, `model_name`, 
