@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, flash, json
+from flask import Flask, render_template, redirect, request, flash, url_for, json
 from flask_mysqldb import MySQL
 import os
 from database.database import LennysDB
@@ -38,7 +38,7 @@ def customer_contacts():
         valid, res_msg = db.customer_contacts.insert_into(request.form.copy())
         rsp_category = 'success' if valid else 'error'
         flash(res_msg, rsp_category)
-        return redirect(request.url)
+        return redirect(url_for('customer_contacts'))
     if request.method == 'GET':
         # first and last name query params are used for the "Search" functionality
         first_name = request.args.get('first_name')
@@ -68,7 +68,7 @@ def houses():
             valid, res_msg = db.houses.insert_into(form_data)
             rsp_category = 'success' if valid else 'error'
             flash(res_msg, rsp_category)
-        return redirect(request.url)
+        return redirect(url_for('houses'))
     if request.method == 'GET':
         name = db.houses.get_title()
         table_data = db.houses.select_all()
@@ -99,7 +99,7 @@ def job_workers():
             valid, res_msg = db.job_workers.insert_into(form_data)
             rsp_category = 'success' if valid else 'error'
             flash(res_msg, rsp_category)
-        return redirect(request.url)
+        return redirect(url_for('job_workers'))
     if request.method == 'GET':
         name = db.job_workers.get_title()
         table_data = db.job_workers.select_all()
@@ -122,7 +122,7 @@ def jobs():
             valid, res_msg = db.jobs.insert_into(form_data)
             rsp_category = 'success' if valid else 'error'
             flash(res_msg, rsp_category)
-        return redirect(request.url)
+        return redirect(url_for('jobs'))
     if request.method == 'GET':
         name = db.jobs.get_title()
         table_data = db.jobs.select_all()
@@ -145,7 +145,7 @@ def lawnmowers():
             valid, res_msg = db.lawnmowers.insert_into(form_data)
             rsp_category = 'success' if valid else 'error'
             flash(res_msg, rsp_category)
-        return redirect(request.url)
+        return redirect(url_for('lawnmowers'))
     if request.method == 'GET':
         name = db.lawnmowers.get_title()
         table_data = db.lawnmowers.select_all()
@@ -166,7 +166,7 @@ def sales_managers():
             valid, res_msg = db.sales_managers.insert_into(form_data)
             rsp_category = 'success' if valid else 'error'
             flash(res_msg, rsp_category)
-        return redirect(request.url)
+        return redirect(url_for('sales_managers'))
     if request.method == 'GET':
         name = db.sales_managers.get_title()
         table_data = db.sales_managers.select_all()
@@ -179,7 +179,7 @@ def workers():
         valid, res_msg = db.workers.insert_into(request.form.copy())
         rsp_category = 'success' if valid else 'error'
         flash(res_msg, rsp_category)
-        return redirect(request.url)
+        return redirect(url_for('workers'))
     if request.method == 'GET':  # render the page
         name = db.workers.get_title()
         table_data = db.workers.select_all()
